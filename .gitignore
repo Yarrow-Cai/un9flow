@@ -1,0 +1,60 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Node / Bun
+node_modules/
+.bun/
+coverage/
+
+# Generic build outputs
+build/
+out/
+dist/
+tmp/
+.temp/
+.cache/
+
+# Embedded build artifacts
+Debug/
+Release/
+Listings/
+Objects/
+*.o
+*.obj
+*.d
+*.su
+*.lst
+*.map
+*.axf
+*.elf
+*.hex
+*.bin
+*.srec
+*.log
+
+# Keil / MDK transient files
+*.uvguix.*
+*.dep
+*.crf
+*.bak
+*.lnp
+JLinkLog.txt
+
+# Generated local state
+.gstack/
+.claude/
+.codex/
+.cursor/
