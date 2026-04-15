@@ -9,64 +9,62 @@
 - [x] 形成文档基线
 - [x] 初始化仓库
 
-## v1 - 能力域定义
+## v1 - incident-first 规格定义
 
-目标：把未来 skills 的语义边界定义清楚。
-
-计划方向：
-
-- [ ] 固化 `hazard-analysis` 的输入 / 输出模板
-- [ ] 固化 `deterministic-foundation` 的输入 / 输出模板
-- [ ] 固化 `link-diagnostics` 的输入 / 输出模板
-- [ ] 固化 `failsafe-validation` 的输入 / 输出模板
-- [ ] 增加寄存器位域地图模板
-- [ ] 增加系统生存清单模板
-- [ ] 增加通信链路健康诊断模板
-- [ ] 增加故障注入矩阵模板
-
-## v2 - 正式 skill 化
-
-目标：把文档能力域升级为真正可安装的 skills。
+目标：先把第一条可运行 incident workflow 的边界钉死。
 
 计划方向：
 
-- [ ] 建立正式 skill 目录结构
-- [ ] 编写可安装的 `SKILL.md`
-- [ ] 定义短名 / 前缀名策略
-- [ ] 建立最小可用的 skill 发现与接入说明
+- [ ] 定义 `incident-investigation` 场景规格
+- [ ] 定义 `incident-orchestrator` 职责边界
+- [ ] 定义 5 个 `Domain Specialist` 的输入 / 输出契约（含 `signal-path-tracer`）
+- [ ] 定义第一批 `Artifact` 模板（如 `incident-summary`、`evidence-package`、`incident-review-memo`）
+- [ ] 固化 `Scenario / Phase / Domain Specialist / Artifact` 命名规则
+- [ ] 固定第一条 incident pipeline 的输入输出边界，禁止混淆 skill 与 artifact 角色
 
-## v3 - 平台安装体验
+## v2 - incident pipeline skill 化
 
-目标：让仓库具备可分发、可接入、可维护的安装路径。
+目标：把第一条 embedded incident workflow 做成真正可接入的能力链。
 
 计划方向：
 
-- [ ] `setup` 安装脚本
-- [ ] 多 host 安装路径适配
-- [ ] 自动创建 skill 目录映射
-- [ ] 平台差异化配置说明
+- [ ] 落地 `incident-investigation`
+- [ ] 落地 `evidence-pack`
+- [ ] 落地 `incident-review`
+- [ ] 落地 `incident-orchestrator` 调度规则
+- [ ] 落地 5 个 `Domain Specialist`
+
+## v3 - host 接入
+
+目标：让 incident-first 能力链在 host 层可消费。
+
+计划方向：
+
+- [ ] 第一阶段仅对齐 workflow orchestration 思路、Claude Code / skill 入口习惯与后续目录组织方式
+- [ ] `gstack-compatible first` 仅指以上对齐层，不承诺现阶段具备安装器、分发、目录映射或广泛 host 兼容能力
+- [ ] OpenClaw 作为外层调度预留位
 
 ## v4 - 生成与校验体系
 
-目标：减少文档漂移，提升能力定义的一致性。
+目标：围绕 incident-first 的 `incident pipeline`，补齐能力定义的可生成、可校验、可回归。
 
 计划方向：
 
-- [ ] 模板化能力文档
-- [ ] 文档生成脚本
-- [ ] 文档一致性检查
-- [ ] 示例任务回归测试
+- [ ] 模板化能力文档（基于 `Artifact` 模板）
+- [ ] 文档生成脚本（覆盖 incident workflow 主线）
+- [ ] `Scenario / Phase / Domain Specialist / Artifact` 一致性校验
+- [ ] `incident workflow` 示例任务回归测试
 
 ## v5 - 嵌入式专用能力
 
-目标：把 un9flow 做成真正的 embedded skill 工具链。
+目标：在 incident-first 跑稳后，沿 incident workflow 向外扩展 embedded 专用能力。
 
 计划方向：
 
-- [ ] 功能安全 review 能力
-- [ ] 寄存器审计能力
-- [ ] ISR / 主循环职责冲突检查
-- [ ] 看门狗与超时策略审计
+- [ ] 功能安全 review 能力（按 Domain Specialist 输出要求对齐 incident-first）
+- [ ] 寄存器审计能力（对接 `incident workflow` 中对应 Artifact）
+- [ ] ISR / 主循环职责冲突检查（沿 `Domain Specialist` 与 `Artifact` 主线延展）
+- [ ] 看门狗与超时策略审计（以 incident pipeline 事件语义串联）
 - [ ] 菊花链 / isoSPI / AFE bring-up 模板
 - [ ] Keil Scatter / Linker Script 审核模板
 

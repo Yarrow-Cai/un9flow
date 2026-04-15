@@ -39,23 +39,27 @@
 - `link-diagnostics`
 - `failsafe-validation`
 
-## 后续接入方向
+## 第一版接入优先级
 
-当项目进入工具化阶段后，预计会按以下方向接入目标平台：
+第一版采用 **incident-first / gstack-compatible first** 策略，第一阶段仅对齐以下三点：
 
-### Claude Code
-- 将能力域拆分为独立 skill 入口
-- 支持短名 / 前缀名策略
-- 通过标准 skills 目录接入
+- workflow orchestration 思路
+- Claude Code / skill 入口习惯
+- 后续目录组织方式
 
-### Codex CLI / Cursor / OpenCode / Factory / Slate / Kiro
-- 采用与目标平台兼容的目录映射方式
-- 保持 Markdown-first 的文档组织
-- 逐步补齐平台特定安装流程
+第一版不意味着：
+- 复用 gstack 命名体系
+- 复制人格化 specialist
+- 现阶段直接继承 gstack 安装器
+- 不承诺现阶段具备安装器、分发、目录映射或广泛 host 兼容能力
 
-### OpenClaw
-- 作为外层调度入口
-- 按任务类型路由到未来的专业能力域
+命名纪律：`Scenario / Phase / Domain Specialist / Artifact`
+
+host 优先级：
+1. Claude Code
+2. gstack 风格 skill 编排环境
+3. OpenClaw 作为外层调度预留位
+4. 其他 host 在核心 workflow 稳定后推进
 
 ## 项目特点
 

@@ -44,8 +44,10 @@
 
 - `docs/PHILOSOPHY.md`：开发哲学
 - `docs/WORKFLOW.md`：方法论工作流
+- `docs/INCIDENT_WORKFLOW.md`：incident-first 故障排查工作流基线
 - `docs/PLATFORMS.md`：目标平台与后续接入方向
 - `docs/ROADMAP.md`：版本路线图
+- `docs/templates/`：incident summary、evidence package、diagnosis pack、review memo 模板
 - `AGENTS.md`：仓库内协作约束
 
 ## 规划中的能力域
@@ -86,8 +88,17 @@ un9flow/
 └── docs/
     ├── PHILOSOPHY.md
     ├── WORKFLOW.md
+    ├── INCIDENT_WORKFLOW.md
     ├── PLATFORMS.md
-    └── ROADMAP.md
+    ├── ROADMAP.md
+    ├── templates/
+    │   ├── incident-summary.md
+    │   ├── evidence-package.md
+    │   ├── incident-diagnosis-pack.md
+    │   └── incident-review-memo.md
+    └── superpowers/
+        ├── specs/
+        └── plans/
 ```
 
 ## 当前阶段目标
@@ -96,8 +107,9 @@ un9flow/
 
 - 建立哲学与约束边界
 - 建立工作流阶段定义
-- 明确未来 skill 能力域命名
-- 明确平台兼容方向
+- 明确 `Scenario / Phase / Domain Specialist / Artifact` 命名规则
+- 第一阶段仅对齐 workflow orchestration 思路、Claude Code / skill 入口习惯与后续目录组织方式
+- `gstack-compatible first` 仅指上述三类对齐，不承诺现阶段具备安装器、分发、目录映射或广泛 host 兼容能力
 - 先形成稳定文档基线，再进入工具化与 skill 化
 
 后续再逐步补齐：
@@ -107,5 +119,15 @@ un9flow/
 - 模板生成体系
 - 专用 safety review / register audit 能力
 - 失效模式与寄存器图谱生成工具
+
+## 演进顺序
+
+- v1：incident-first 规格定义
+- v2：incident pipeline skill 化
+- v3：host 接入
+- v4：模板生成与一致性校验
+- v5：嵌入式专用能力外扩
+
+当前优先级不是多 host 分发，而是先把第一条 incident workflow 讲清、定稳、再技能化。
 
 详见：[`docs/ROADMAP.md`](docs/ROADMAP.md)

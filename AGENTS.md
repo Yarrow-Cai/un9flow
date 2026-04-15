@@ -62,3 +62,20 @@
 - 通信链路健康诊断表
 - 高风险失效路径清单（Critical Failure Path List）
 - 跛行模式 / Failsafe 验证项
+
+## incident-first 分层纪律
+
+涉及 un9flow 后续 skill / agent 设计时，统一使用四层命名：
+
+- Scenario：用户任务入口，例：`incident-investigation`
+- Phase：方法论骨架，例：`hazard-analysis`
+- Domain Specialist：证据域与分析动作，例：`register-state-auditor`
+- Artifact：可审计输出物，例：`register-bitfield-map`
+
+执行结构为五层（Scenario / Orchestrator / Phase / Domain Specialist / Artifact），命名纪律仍是四层（Scenario / Phase / Domain Specialist / Artifact）；Orchestrator 仅为执行拓扑中的调度角色。
+
+- 编写或修改文档/流程时必须遵守：
+  - 不要把 phase 名称当作用户入口名
+  - 不要让 orchestrator 吞掉 specialist 的专业判断
+  - 不要只写抽象结论，必须明确输出物（例如 `state-transition-chain`、`register-anomaly-list`）
+  - 涉及 `incident-investigation` 时，优先同步 `docs/INCIDENT_WORKFLOW.md`

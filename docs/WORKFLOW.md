@@ -75,6 +75,12 @@ Hazard Analysis -> Deterministic Foundation -> Link Diagnostics -> Failsafe Vali
 
 ## 推荐执行节奏
 
+### incident-investigation 执行链
+
+```text
+Incident Intake -> Hazard Framing -> Path Localization -> Deterministic Audit -> Convergence Check -> Incident Review
+```
+
 ### 新功能 / 新板卡 bring-up
 ```text
 hazard-analysis -> deterministic-foundation -> link-diagnostics -> failsafe-validation
@@ -88,6 +94,25 @@ hazard-analysis -> link-diagnostics -> failsafe-validation -> deterministic-foun
 ### 功能安全复核
 ```text
 hazard-analysis -> deterministic-foundation -> failsafe-validation
+```
+
+### incident-first 调度结构
+
+- Scenario 入口：`incident-investigation`
+- 调度核心：`incident-orchestrator`
+- Phase 仍沿用：`hazard-analysis` / `deterministic-foundation` / `link-diagnostics` / `failsafe-validation`
+- Domain Specialist 负责具体证据分析，不由 orchestrator 吞并
+- 最终必须产出 reviewable artifacts（可复核工件）
+
+### 典型闭环
+
+```text
+Incident Intake
+  -> Hazard Framing
+    -> Path Localization
+      -> Deterministic Audit
+        -> Convergence Check
+          -> Incident Review
 ```
 
 ## 核心信条
