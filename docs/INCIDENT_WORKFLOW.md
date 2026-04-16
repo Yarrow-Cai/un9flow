@@ -14,11 +14,10 @@
   - artifact 汇总与缺口跟踪
   - review gate 前的结果收口与下一步建议
 
-## incident 场景入口
+## incident 场景主入口与辅助 skill
 - 对外 skill 入口（负责发起/整理/复核，不产出审计结论）：
-  - `incident-investigation`
-  - `evidence-pack`
-  - `incident-review`
+  - 主场景入口：`incident-investigation`
+  - 辅助 skill：`evidence-pack`、`incident-review`
 
 - Artifact 输出（可审计沉淀结果）：
   - `incident-summary`
@@ -29,8 +28,8 @@
 
 - 证据流转说明：
   - `incident-investigation` 在 intake 阶段先产出 `evidence-inventory`，这是已知证据盘点清单（Artifact）。
-  - 当盘点项杂乱或格式不统一时，由 `evidence-pack` 这个 Scenario 入口 skill 负责整理。
-  - `evidence-pack` skill 的输出是 `evidence-package`，它是供 `incident-orchestrator` 直接消费的结构化证据包（Artifact）。
+  - 当盘点项杂乱或格式不统一时，由辅助 skill `evidence-pack` 负责整理。
+  - `evidence-pack` 的输出是 `evidence-package`，它是供 `incident-orchestrator` 直接消费的结构化证据包（Artifact）。
 
 ## Orchestrator（场景内）
 - `incident-orchestrator`

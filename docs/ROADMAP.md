@@ -6,7 +6,7 @@
 
 - [x] 项目命名为 `un9flow`
 - [x] 建立 README / 哲学 / 工作流 / 平台说明
-- [x] 形成文档基线
+- [x] 形成文档基线（含 `docs/SKILL_ARCHITECTURE.md` 与 `docs/ORCHESTRATOR_PROMPT_CONTRACT.md` 入口规范/调度协议基线，先于后续 `SKILL.md`）
 - [x] 初始化仓库
 
 ## v1 - incident-first 规格定义
@@ -19,6 +19,8 @@
 - [x] 落地 `incident-investigation` 场景规格基线
 - [x] 落地 `incident-orchestrator` 职责边界基线
 - [x] 落地 `docs/ORCHESTRATION.md` 作为总调度文档
+- [ ] 先固化 `docs/SKILL_ARCHITECTURE.md` 中的总入口 / 三子入口 / 辅助 skill 边界（作为正式 `SKILL.md` 前置**入口规范**）
+- [ ] 先固化 `docs/ORCHESTRATOR_PROMPT_CONTRACT.md` 的调度协议，再落地 host 侧 prompt 绑定文件。
 - [ ] 定义 5 个 `Domain Specialist` 的输入 / 输出契约（含 `signal-path-tracer`）
 - [x] 落地第一批 `Artifact` 模板基线（如 `incident-summary`、`evidence-package`、`incident-review-memo`）
 - [ ] 固化 `Scenario / Phase / Domain Specialist / Artifact` 命名规则

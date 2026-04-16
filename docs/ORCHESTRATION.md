@@ -13,6 +13,7 @@
 
 - `Scenario / Phase / Domain Specialist / Artifact` 是命名纪律；
 - 当前文档定义的是**总调度外壳**（总 orchestrator）：统一 case、主路由、Phase 装配、specialist 分派与控制信号。
+- `docs/ORCHESTRATOR_PROMPT_CONTRACT.md` 负责 prompt 的输入/输出协议与硬约束；`docs/ORCHESTRATION.md` 保持总调度规则主文档。
 - `incident-orchestrator` 仅是 `incident-investigation` **场景内调度器示例**，不是三场景共用的总路由名。
 - 未来若扩展为更通用名字，可由**总调度外壳**向各 scenario 内调度器下发 phase / dispatch 规则。
 
@@ -95,16 +96,7 @@
 - `upgrade-to-incident-investigation`
 - `enter-review-gate`
 
-## prompt 契约骨架
+## prompt 协议锚点
 
-### 输入段
-- case input
-- normalized case
-- routing context
-- control context
-
-### 输出段
-- routing result
-- phase plan
-- dispatch plan
-- control result
+- `prompt` 的输入/输出协议、硬约束与扩展点统一见 `docs/ORCHESTRATOR_PROMPT_CONTRACT.md`。
+- 本文仅保留总调度外壳规则，不再在本节重复细化协议字段，避免与 contract 成为双重真源。
