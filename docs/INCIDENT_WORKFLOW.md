@@ -3,17 +3,19 @@
 ## 目标
 围绕 `incident-investigation` 形成首个可复用的 embedded 故障排查闭环：以证据驱动判断风险、定位路径、核对确定性结构，最终给出可复核的 review 输出。
 
-## 五层结构（执行结构）
-- Scenario 入口
-- Orchestrator（执行拓扑中的调度角色）
-- Phase 骨架
-- Domain Specialist
-- Artifact / Review 输出
+说明：三场景共用的 orchestrator 总调度规则统一见 `docs/ORCHESTRATION.md`，incident 文档仅保留 incident 场景专属内容。
+在该文档中，不重复定义 `Scenario / Phase / Domain Specialist / Artifact` 的总规则，只说明 incident 内的落地方式。
 
-说明：这里的“五层结构”是执行结构；命名纪律为四层（Scenario / Phase / Domain Specialist / Artifact），其中 Orchestrator 只是调度角色，不单独构成命名层。
+## incident 场景内调度器边界
+- 总调度外壳在 `docs/ORCHESTRATION.md` 先决定主场景、全局路由和控制信号。
+- `incident-orchestrator` 是 `incident-investigation` 的**场景内调度器**，在主场景已确认后承担：
+  - phase 排序与可重排
+  - specialist 分派
+  - artifact 汇总与缺口跟踪
+  - review gate 前的结果收口与下一步建议
 
-## Scenario 入口
-- 对外入口 skill（负责发起/整理/复核，不产出审计结论）：
+## incident 场景入口
+- 对外 skill 入口（负责发起/整理/复核，不产出审计结论）：
   - `incident-investigation`
   - `evidence-pack`
   - `incident-review`
@@ -30,14 +32,14 @@
   - 当盘点项杂乱或格式不统一时，由 `evidence-pack` 这个 Scenario 入口 skill 负责整理。
   - `evidence-pack` skill 的输出是 `evidence-package`，它是供 `incident-orchestrator` 直接消费的结构化证据包（Artifact）。
 
-## Orchestrator
+## Orchestrator（场景内）
 - `incident-orchestrator`
 - 职责：
-  - 接收 `incident-summary` 与标准化后的 `evidence-package`（结构化证据包），而非原始零散证据描述，建立 case 目标边界
-  - 选择并编排 `hazard-analysis` / `deterministic-foundation` / `link-diagnostics` / `failsafe-validation` 的执行顺序
-  - 分派对应 specialist 并记录证据缺口
-  - 汇总中间结果，维护置信度与升级条件
-  - 在 `Incident Review` 前完成结果聚合并输出下一步建议
+  - 接收 `incident-summary` 与标准化后的 `evidence-package`（结构化证据包），建立 case 目标边界
+  - 按已由总调度外壳确认的场景目标执行 `hazard-analysis` / `deterministic-foundation` / `link-diagnostics` / `failsafe-validation` 的 phase 排序与重排
+  - 调用对应 specialist 并记录证据缺口
+  - 汇总场景内中间结果，维护置信度与升级条件
+  - `Incident Review` 前完成结果聚合并给出收口建议
 
 ## 第一批 specialist
 - `signal-path-tracer`
@@ -66,7 +68,7 @@ Incident Intake
   - `Incident Review` 是 review gate，不单独作为 phase
 
 ## 最低标准输出物
-- `Scenario` 入口（`incident-investigation` / `evidence-pack` / `incident-review`）负责发起、整理与复核，不直接充当 Artifact 名称。
+- incident 场景内的 skill 入口（`incident-investigation` / `evidence-pack` / `incident-review`）负责发起、整理与复核，不直接充当 Artifact 名称。
 - `evidence-inventory` 为盘点清单；`evidence-package` 为由 `evidence-pack` skill 产出的结构化证据包，供 `incident-orchestrator` 消费。
 - `incident-summary`
 - `evidence-inventory`
@@ -91,6 +93,7 @@ Incident Intake
 - `incident-orchestrator`
   - 输入：`incident-summary`、`evidence-package`、`initial-risk-note`
   - 输出：`phase-plan`、`specialist-dispatch-list`、`incident-diagnosis-pack`、`next-step-decision`
+  - 其中 `next-step-decision` 应映射到总调度控制信号集合（见 `docs/ORCHESTRATION.md`）
 
 - `signal-path-tracer`
   - 输出：`segmented-failure-path`、`observability-point-list`、`path-suspicion-ranking`
@@ -110,15 +113,7 @@ Incident Intake
 - `incident-review`
   - 输出：`incident-review-memo`、`confidence-gap-summary`、`recommended-next-action`
 
-## 命名与分层规则
+## 命名与分层约束（继承总则）
 
-- `incident 工作流链`的执行步骤名和 un9flow `Phase` 名来自不同层级定义，不可互换。
-- Scenario：用户任务入口，例如 `incident-investigation`
-- Phase：方法论骨架，例如 `hazard-analysis`
-- Domain Specialist：证据域与分析动作，例如 `register-state-auditor`
-- Artifact：可审计输出物，例如 `register-bitfield-map`
-
-- 规则
-  - 不让 skill 伪装成 phase：`incident-investigation`、`evidence-pack`、`incident-review` 只承担输入/输出边界定义，不作为阶段名。
-  - 不让 agent 命名成 artifact：`register-state-auditor`、`state-machine-tracer`、`signal-path-tracer` 作为执行角色（Domain Specialist），不作为沉淀物名称。
-  - 不把 scenario 和 domain 混成一层：`incident-orchestrator` 负责编排路径，`register-state-auditor` 负责寄存器域审计，边界不可互换。
+- 该文档不重复展开共性约束：`Scenario / Phase / Domain Specialist / Artifact` 的详细定义与总命名纪律，沿用 `docs/ORCHESTRATION.md`。
+- 在 incident 场景内保留最小边界：`incident-investigation`、`evidence-pack`、`incident-review` 仅作为场景内 skill / 输入输出入口，不作为全局主路由对象；`register-state-auditor`、`state-machine-tracer`、`signal-path-tracer` 仅作为 Domain Specialist。

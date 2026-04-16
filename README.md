@@ -45,9 +45,10 @@
 - `docs/PHILOSOPHY.md`：开发哲学
 - `docs/WORKFLOW.md`：方法论工作流
 - `docs/INCIDENT_WORKFLOW.md`：incident-first 故障排查工作流基线
+- `docs/ORCHESTRATION.md`：三场景并列的 orchestrator 总调度规则；负责总调度规则，`docs/INCIDENT_WORKFLOW.md` 负责 incident 场景专属闭环。
 - `docs/PLATFORMS.md`：目标平台与后续接入方向
 - `docs/ROADMAP.md`：版本路线图
-- `docs/templates/`：incident summary、evidence package、diagnosis pack、review memo 模板
+- `docs/templates/`：incident 与 orchestrator 模板（incident summary、evidence package、diagnosis pack、review memo；orchestrator-routing-matrix、orchestrator-dispatch-plan，分别用于 orchestrator 路由验证矩阵与 dispatch plan）
 - `AGENTS.md`：仓库内协作约束
 
 ## 规划中的能力域
@@ -89,13 +90,16 @@ un9flow/
     ├── PHILOSOPHY.md
     ├── WORKFLOW.md
     ├── INCIDENT_WORKFLOW.md
+    ├── ORCHESTRATION.md
     ├── PLATFORMS.md
     ├── ROADMAP.md
     ├── templates/
     │   ├── incident-summary.md
     │   ├── evidence-package.md
     │   ├── incident-diagnosis-pack.md
-    │   └── incident-review-memo.md
+    │   ├── incident-review-memo.md
+    │   ├── orchestrator-routing-matrix.md
+    │   └── orchestrator-dispatch-plan.md
     └── superpowers/
         ├── specs/
         └── plans/

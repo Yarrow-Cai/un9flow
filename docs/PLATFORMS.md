@@ -46,6 +46,7 @@
 - workflow orchestration 思路
 - Claude Code / skill 入口习惯
 - 后续目录组织方式
+- host 接入目标是同时对齐 `docs/ORCHESTRATION.md`（总调度）与场景文档（如 `docs/INCIDENT_WORKFLOW.md`），而非只绑定单一 scenario 文档
 
 第一版不意味着：
 - 复用 gstack 命名体系
