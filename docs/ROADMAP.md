@@ -57,7 +57,10 @@
 
 - [ ] 模板化能力文档（基于 `Artifact` 模板）
 - [ ] 文档生成脚本（覆盖 incident workflow 主线）
-- [x] 增加路由验证矩阵模板
+- [x] 落地 `docs/CONSISTENCY_VALIDATION.md` 统一校验基线
+- [x] 增加 `consistency-review-checklist.md`
+- [x] 增加 `validation-findings.md`
+- [x] `docs/templates/skill-routing-matrix.md` 作为案例层模板继续复用
 - [x] 增加 orchestrator dispatch plan 模板
 - [ ] `Scenario / Phase / Domain Specialist / Artifact` 一致性校验
 - [ ] `incident workflow` 示例任务回归测试

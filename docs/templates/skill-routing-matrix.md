@@ -1,0 +1,16 @@
+# skill-routing-matrix
+
+- 角色说明：本模板在统一校验体系中作为案例层模板，用于验证路由规则是否能解释真实输入。
+
+## 使用说明
+- 该模板用于沉淀入口路由案例，统一记录证据画像与路由判定理由。
+- 单 case 单记录：一次请求只填写一条完整记录，不并列多条 route 行。
+
+## 模板（单 case 单记录）
+- `case id`:
+- `user phrasing`:
+- `evidence profile`:
+- `route decision`（单值，允许值：`orchestration` / `incident-investigation` / `bringup-path` / `design-safety-review` / `evidence-pack` / `incident-review`；其中 `evidence-pack` / `incident-review` 仅在 incident 语义上下文中允许填写）:
+- `route type`（单值，允许值：`直进子入口` / `先走总入口` / `辅助 skill 受控进入`）:
+- `why this route`:
+- `why not others`:

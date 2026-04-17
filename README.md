@@ -40,18 +40,19 @@
 
 ## 当前仓库内容
 
-当前仓库主要包含以下文档：
+当前仓库主要包含以下文档与目录：
 
 - `docs/PHILOSOPHY.md`：开发哲学
 - `docs/WORKFLOW.md`：方法论工作流
 - `docs/INCIDENT_WORKFLOW.md`：incident-first 故障排查工作流基线
 - `docs/ORCHESTRATION.md`：三场景并列的 orchestrator 总调度规则；负责总调度规则，`docs/INCIDENT_WORKFLOW.md` 负责 incident 场景专属闭环。
 - `docs/SKILL_ARCHITECTURE.md`：总入口、三子入口与辅助 skill 的结构关系与边界基线；作为 skill **入口规范**（`SKILL.md` 前置基线）。
-- `skills/orchestration/SKILL.md`：总入口 skill，承接模糊请求、跨场景请求与显式总调度请求。
+- `skills/`：首批正式 skill 文件目录（含 `skills/orchestration/SKILL.md` 总入口，以及主场景/辅助入口 skill），用于承接路由、场景执行与产物补齐。
 - `docs/ORCHESTRATOR_PROMPT_CONTRACT.md`：un9flow orchestrator 与 scenario prompt 的输入输出与控制信号约束，定义统一**调度协议**。
+- `docs/CONSISTENCY_VALIDATION.md`：docs / skills / templates / cases / 过程文档的统一一致性校验总文档
 - `docs/PLATFORMS.md`：目标平台与后续接入方向
 - `docs/ROADMAP.md`：版本路线图
-- `docs/templates/`：incident 与 orchestrator 模板（incident summary、evidence package、diagnosis pack、review memo；orchestrator-routing-matrix、orchestrator-dispatch-plan、prompt-contract-checklist、skill-boundary-checklist）
+- `docs/templates/`：incident / orchestrator / consistency 模板（incident summary、evidence package、diagnosis pack、review memo；orchestrator-routing-matrix、orchestrator-dispatch-plan、prompt-contract-checklist、skill-boundary-checklist、skill-routing-matrix、consistency-review-checklist、validation-findings）
 - `AGENTS.md`：仓库内协作约束
 
 ## 规划中的能力域
@@ -89,27 +90,44 @@ un9flow/
 ├── README.md
 ├── .gitignore
 ├── AGENTS.md
-└── docs/
-    ├── PHILOSOPHY.md
-    ├── WORKFLOW.md
-    ├── INCIDENT_WORKFLOW.md
-    ├── ORCHESTRATION.md
-    ├── PLATFORMS.md
-    ├── ROADMAP.md
-    ├── SKILL_ARCHITECTURE.md
-    ├── ORCHESTRATOR_PROMPT_CONTRACT.md
-    ├── templates/
-    │   ├── incident-summary.md
-    │   ├── evidence-package.md
-    │   ├── incident-diagnosis-pack.md
-    │   ├── incident-review-memo.md
-    │   ├── orchestrator-routing-matrix.md
-    │   ├── orchestrator-dispatch-plan.md
-    │   ├── prompt-contract-checklist.md
-    │   └── skill-boundary-checklist.md
-    └── superpowers/
-        ├── specs/
-        └── plans/
+├── docs/
+│   ├── PHILOSOPHY.md
+│   ├── WORKFLOW.md
+│   ├── INCIDENT_WORKFLOW.md
+│   ├── ORCHESTRATION.md
+│   ├── PLATFORMS.md
+│   ├── ROADMAP.md
+│   ├── SKILL_ARCHITECTURE.md
+│   ├── ORCHESTRATOR_PROMPT_CONTRACT.md
+│   ├── CONSISTENCY_VALIDATION.md
+│   ├── templates/
+│   │   ├── incident-summary.md
+│   │   ├── evidence-package.md
+│   │   ├── incident-diagnosis-pack.md
+│   │   ├── incident-review-memo.md
+│   │   ├── orchestrator-routing-matrix.md
+│   │   ├── orchestrator-dispatch-plan.md
+│   │   ├── prompt-contract-checklist.md
+│   │   ├── skill-boundary-checklist.md
+│   │   ├── skill-routing-matrix.md
+│   │   ├── consistency-review-checklist.md
+│   │   └── validation-findings.md
+│   └── superpowers/
+│       ├── specs/
+│       └── plans/
+└── skills/
+    ├── orchestration/
+    │   └── SKILL.md
+    ├── incident-investigation/
+    │   └── SKILL.md
+    ├── design-safety-review/
+    │   └── SKILL.md
+    ├── bringup-path/
+    │   └── SKILL.md
+    ├── evidence-pack/
+    │   └── SKILL.md
+    └── incident-review/
+        └── SKILL.md
 ```
 
 ## 当前阶段目标
