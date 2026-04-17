@@ -42,6 +42,45 @@
 3. **冲突时优先下一步最可执行场景**：在多场景信号同强时，优先选当前能直接推进且可闭环的场景。
 4. **路由校准**：若下游证据推翻上一步主判定，可触发换轨（目标不变，场景纠偏）。
 
+## 入口路由优先级
+
+### 核心原则
+- 显式总调度请求（如“先走总调度 / 先做统一编排 / 让 orchestrator 判定场景”）必须先走 `orchestration`。
+- 显式主场景且证据一致时直进子入口。
+- 模糊、交叉或跨场景请求时先走 `orchestration`。
+- 辅助 skill 不参与全局首路由竞争，仅在 incident 语义上下文中受控进入。
+
+### 优先级顺序
+1. 显式总调度请求 -> `orchestration`。
+2. 显式主场景且证据一致。
+3. 模糊 / 交叉 / 跨场景 -> `orchestration`。
+4. 显式辅助 skill 点名（仅在 incident 语义上下文中成立）。
+5. 低置信度判断时，宁可走总入口，不误塞子入口。
+
+> 路由判定记录建议使用 `docs/templates/skill-routing-matrix.md`，统一沉淀 case 证据与判定理由。
+
+## 辅助 skill 受控进入规则
+
+### `evidence-pack`
+- 只允许：
+  1. 用户显式要求先整理证据 / 补证据。
+  2. incident 主链明确要求先补证据。
+- 禁止：
+  - 参与全局主路由竞争。
+  - 单独充当 incident 主入口。
+  - 在没有 incident 语义时被误当成通用证据整理器。
+  - 直接输出根因结论。
+
+### `incident-review`
+- 只允许：
+  1. 用户显式要求复核当前 incident 结论。
+  2. incident 主链已经形成初步结论，准备进入 review gate。
+- 禁止：
+  - 参与全局主路由竞争。
+  - 充当通用 review / audit skill。
+  - 替代 `design-safety-review`。
+  - 在证据链明显不足时给“通过”结论。
+
 ## 默认场景骨架与 specialist 装配
 - `incident-investigation`
   - 默认 Phase：`hazard-analysis -> link-diagnostics -> deterministic-foundation -> failsafe-validation`
