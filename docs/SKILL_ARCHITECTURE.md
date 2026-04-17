@@ -1,7 +1,7 @@
 # un9flow Skill Architecture
 
 ## 目标
-将“总入口 skill + 三子入口 skill + 辅助 skill”的方法边界先固定为**可复用、可审查**，并沉淀为后续正式 `SKILL.md` 可直接继承的文档基线。
+将“总入口 skill + 三子入口 skill + 辅助 skill”的方法边界固定为**可复用、可审查、已落地的架构基线**，供后续 skill 扩展与审查继续沿用。
 
 ## skill 版图
 
@@ -13,6 +13,22 @@
 - **辅助 skill**：
   - `evidence-pack`
   - `incident-review`
+
+## 首批正式 skill 落点
+
+- `skills/orchestration/SKILL.md`
+- `skills/incident-investigation/SKILL.md`
+- `skills/bringup-path/SKILL.md`
+- `skills/design-safety-review/SKILL.md`
+- `skills/evidence-pack/SKILL.md`
+- `skills/incident-review/SKILL.md`
+
+这六个正式文件已经构成当前 skill 架构的首批可用基线：
+- 总入口 `orchestration` 负责进入与承接总调度
+- 三个主场景入口采用统一主骨架
+- 两个 incident 辅助 skill 负责主动找证据与证据链复核
+- 默认运行约束以各自正式 `SKILL.md` 中的 `Phase / specialist / Artifact` 配置为准
+- 三者差异通过各自场景特化段表达
 
 ## 总入口职责
 
@@ -27,12 +43,22 @@
 
 ## 子入口职责（场景入口）
 
-每个场景入口 skill 在声明边界时需固定：
+每个场景入口 skill 在正式文件中固定同一主骨架：
 
-1. **场景边界**：该入口仅处理所属场景语义，拒绝扩散到其他场景；
-2. **最小输入要求**：给定场景必须满足的关键输入（如目标系统、故障症状、上下文版本、限制条件）；
-3. **场景内初始 Artifact 组织**：定义进入场景后第一轮应产出的 artifact 结构；
-4. **默认运行约束**：限制场景内默认 `Phase / specialist / Artifact` 的初始值与允许范围（便于人工与自动检查）。
+1. **目标**
+2. **适用边界**
+3. **最小输入要求**
+4. **默认 Phase 骨架**
+5. **默认 specialist 偏向**
+6. **主要 Artifact**
+7. **场景特化段**
+8. **不负责什么**
+9. **与总入口 / prompt 契约的关系**
+10. **Claude Code 宿主附录**
+
+其中真正允许随场景变化的是两层：
+- 场景特化段
+- 默认运行约束（`Phase / specialist / Artifact` 的场景内初始值与允许范围）
 
 ### 子入口清单
 
@@ -47,10 +73,10 @@
 - 仅在特定场景内被主入口显式调用，或被主入口显式引导调用；
 - 输出应为可复用子产物（例如 evidence/diagnosis/review 片段），供主场景继续使用。
 
-## 文档骨架建议（面向后续 `SKILL.md`）
+## 已落地的文档骨架约束
 
 - 总入口 `SKILL.md`
 - 子入口 `SKILL.md`
 - 辅助 skill `SKILL.md`
 
-> 当前仓库为方法论文档仓库，以上为下一阶段 skill 化前的边界骨架，不代表已具备正式 host-level 绑定。
+当前仓库已落第一批正式 skill 文件，但仍保持文档基线阶段：已定义正式文件与边界，不代表已具备自动安装、生成脚本或多 host 绑定能力。

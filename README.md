@@ -6,7 +6,7 @@
 
 `un9flow` 是一个面向**嵌入式系统 / 电力电子 / BMS / 功能安全场景**的项目仓库。
 
-当前阶段，它还是一个**方法论文档仓库**，用于沉淀哲学、约束、工作流与平台方向；**尚未发布可安装的 skills**。
+当前阶段，它还是一个**方法论文档仓库**，用于沉淀哲学、约束、工作流与平台方向；目前已落地第一批正式 `SKILL.md`（总入口与主场景/辅助入口），仅用于方法论与边界定义，但**尚未发布可安装的 skills**。
 
 ## 项目定位
 
@@ -47,6 +47,7 @@
 - `docs/INCIDENT_WORKFLOW.md`：incident-first 故障排查工作流基线
 - `docs/ORCHESTRATION.md`：三场景并列的 orchestrator 总调度规则；负责总调度规则，`docs/INCIDENT_WORKFLOW.md` 负责 incident 场景专属闭环。
 - `docs/SKILL_ARCHITECTURE.md`：总入口、三子入口与辅助 skill 的结构关系与边界基线；作为 skill **入口规范**（`SKILL.md` 前置基线）。
+- `skills/orchestration/SKILL.md`：总入口 skill，承接模糊请求、跨场景请求与显式总调度请求。
 - `docs/ORCHESTRATOR_PROMPT_CONTRACT.md`：un9flow orchestrator 与 scenario prompt 的输入输出与控制信号约束，定义统一**调度协议**。
 - `docs/PLATFORMS.md`：目标平台与后续接入方向
 - `docs/ROADMAP.md`：版本路线图
@@ -55,7 +56,7 @@
 
 ## 规划中的能力域
 
-虽然当前还没有正式 skills，但规划中的能力域已经明确：
+当前阶段虽然有第一批正式 skill 文档，整体仍以文档基线为主；规划中的能力域已经明确：
 
 - `hazard-analysis`
 - `deterministic-foundation`
@@ -124,7 +125,7 @@ un9flow/
 
 后续再逐步补齐：
 
-- 正式 skill 文档
+- host 安装与分发能力
 - 多 host 安装器
 - 模板生成体系
 - 专用 safety review / register audit 能力

@@ -16,8 +16,11 @@
 
 ## incident 场景主入口与辅助 skill
 - 对外 skill 入口（负责发起/整理/复核，不产出审计结论）：
-  - 主场景入口：`incident-investigation`
-  - 辅助 skill：`evidence-pack`、`incident-review`
+  - 主场景入口：`incident-investigation`（文件：`skills/incident-investigation/SKILL.md`）
+  - 辅助 skill（仅场景内协作）：
+    - `evidence-pack`（文件：`skills/evidence-pack/SKILL.md`）
+    - `incident-review`（文件：`skills/incident-review/SKILL.md`）
+  - 说明：`incident` 辅助 skill 不作为全局主路由入口，不参与总路由竞争。
 
 - Artifact 输出（可审计沉淀结果）：
   - `incident-summary`
