@@ -69,11 +69,14 @@ def is_incident_orchestrator_scoped(text: str) -> bool:
         "实现",
     )
     definition_predicate_pattern = re.compile(
-        rf"`?{re.escape(anchor)}`?\s*(?:[:：]\s*)?(?:是|为|作为|仅作|仅为|仅用于|仅限|仅承担|只作|只用于|负责|属于)"
+        rf"(?:`?{re.escape(anchor)}`?[^。\n，,；;:：]{{0,24}}(?:是|为|作为|仅作|仅为|仅用于|仅限|仅承担|只作|只用于|负责|属于|仅是|只对应)|(?:是|为|作为|仅作|仅为|仅用于|仅限|仅承担|只作|只用于|负责|属于|仅是|只对应)[^。\n，,；;:：]{{0,24}}`?{re.escape(anchor)}`?)"
     )
 
     def has_scenario_scope(local_block: str) -> bool:
-        return "场景内" in local_block
+        return any(
+            keyword in local_block
+            for keyword in ("场景内", "incident-investigation", "incident 场景", "incident场景")
+        )
 
     def has_restricted_role(local_block: str) -> bool:
         return any(keyword in local_block for keyword in tightening_keywords)
@@ -164,6 +167,18 @@ def is_incident_orchestrator_scoped(text: str) -> bool:
     def is_heading_or_section_label_line(stripped: str) -> bool:
         return stripped.startswith("#") and anchor in stripped
 
+    def is_heading_definition_anchor_line(stripped: str) -> bool:
+        if not is_heading_or_section_label_line(stripped):
+            return False
+
+        heading_text = re.sub(r"^#+\s*", "", stripped).replace("`", "").strip()
+        lowered = heading_text.lower()
+        if anchor not in lowered:
+            return False
+
+        # 章节标题经常只是目录标签；没有本地定义性谓词时不应单独触发定义判定。
+        return has_definition_predicate(heading_text)
+
     def is_process_plan_meta_mention_line(stripped: str) -> bool:
         normalized = strip_list_marker(stripped)
         return (
@@ -198,7 +213,7 @@ def is_incident_orchestrator_scoped(text: str) -> bool:
         if not is_definition_candidate_line(line):
             return False
         if is_heading_or_section_label_line(stripped):
-            return False
+            return is_heading_definition_anchor_line(stripped)
         if is_process_plan_meta_mention_line(stripped):
             return False
         if is_flow_reference_mention_line(stripped):
@@ -254,59 +269,154 @@ def is_incident_orchestrator_scoped(text: str) -> bool:
 
 def check_docs() -> list[Finding]:
     findings: list[Finding] = []
-    file_label = "docs/ORCHESTRATION.md"
-    file_path = ROOT / "docs" / "ORCHESTRATION.md"
-    content = _read_text(file_path)
 
-    if content is None:
-        findings.append(
-            Finding(
-                level="L1",
-                category="docs",
-                file=file_label,
-                summary="ORCHESTRATION 真源文件缺失或无法读取。",
-                why_it_matters="docs 真源层不可读时，后续映射层和模板层都无法被可信校验。",
-                suggested_action="恢复 docs/ORCHESTRATION.md 并确保 UTF-8 可读。",
-            )
-        )
-        return findings
+    primary_truth_docs = (
+        "docs/ORCHESTRATION.md",
+        "docs/INCIDENT_WORKFLOW.md",
+        "docs/SKILL_ARCHITECTURE.md",
+        "docs/ORCHESTRATOR_PROMPT_CONTRACT.md",
+        "docs/CONSISTENCY_VALIDATION.md",
+    )
+    constrained_docs = (
+        "README.md",
+        "docs/ROADMAP.md",
+        "docs/WORKFLOW.md",
+        "docs/PLATFORMS.md",
+    )
 
-    for keyword in ("Scenario", "Phase", "Domain Specialist", "Artifact"):
-        if keyword not in content:
+    docs_content: dict[str, str] = {}
+
+    for doc in primary_truth_docs:
+        content = _read_text(ROOT / Path(doc))
+        if content is None:
             findings.append(
                 Finding(
                     level="L1",
                     category="docs",
-                    file=file_label,
-                    summary=f"缺少关键术语：{keyword}。",
-                    why_it_matters="对象层级命名不完整会破坏总调度规则的可判定性。",
-                    suggested_action="补齐 Scenario / Phase / Domain Specialist / Artifact 的明确表述。",
+                    file=doc,
+                    summary="主真源 docs 文件缺失或无法读取。",
+                    why_it_matters="主真源不可读会让 docs scope 的一致性校验失去可信依据。",
+                    suggested_action=f"恢复 {doc} 并确保 UTF-8 可读。",
+                )
+            )
+            continue
+        docs_content[doc] = content
+
+    for doc in constrained_docs:
+        content = _read_text(ROOT / Path(doc))
+        if content is None:
+            findings.append(
+                Finding(
+                    level="L2",
+                    category="docs",
+                    file=doc,
+                    summary="受约束 docs 文件缺失或无法读取。",
+                    why_it_matters="受约束 docs 不可读会降低 docs scope 的边界一致性可审查性。",
+                    suggested_action=f"恢复 {doc} 并确保 UTF-8 可读。",
+                )
+            )
+            continue
+        docs_content[doc] = content
+
+    orchestration_label = "docs/ORCHESTRATION.md"
+    orchestration_content = docs_content.get(orchestration_label)
+    if orchestration_content is not None:
+        for keyword in ("Scenario", "Phase", "Domain Specialist", "Artifact"):
+            if keyword not in orchestration_content:
+                findings.append(
+                    Finding(
+                        level="L1",
+                        category="docs",
+                        file=orchestration_label,
+                        summary=f"缺少关键术语：{keyword}。",
+                        why_it_matters="对象层级命名不完整会破坏总调度规则的可判定性。",
+                        suggested_action="补齐 Scenario / Phase / Domain Specialist / Artifact 的明确表述。",
+                    )
+                )
+
+        if not is_incident_orchestrator_scoped(orchestration_content):
+            findings.append(
+                Finding(
+                    level="L2",
+                    category="docs",
+                    file=orchestration_label,
+                    summary="incident-orchestrator 未被约束为场景内调度器示例。",
+                    why_it_matters="未限定语义会误导为全局总路由名，造成边界越权。",
+                    suggested_action="在同一文档中明确其仅为场景内调度器示例。",
                 )
             )
 
-    if not is_incident_orchestrator_scoped(content):
+        if "docs/ORCHESTRATOR_PROMPT_CONTRACT.md" not in orchestration_content:
+            findings.append(
+                Finding(
+                    level="L1",
+                    category="docs",
+                    file=orchestration_label,
+                    summary="缺少对 ORCHESTRATOR_PROMPT_CONTRACT 的回指。",
+                    why_it_matters="总调度规则与 prompt 契约无法建立双文档锚点，容易出现双重真源。",
+                    suggested_action="在 ORCHESTRATION.md 中加入对 docs/ORCHESTRATOR_PROMPT_CONTRACT.md 的引用。",
+                )
+            )
+
+    readme_label = "README.md"
+    readme_content = docs_content.get(readme_label)
+    if readme_content is not None and "docs/CONSISTENCY_VALIDATION.md" not in readme_content:
         findings.append(
             Finding(
                 level="L2",
                 category="docs",
-                file=file_label,
-                summary="incident-orchestrator 未被约束为场景内调度器示例。",
-                why_it_matters="未限定语义会误导为全局总路由名，造成边界越权。",
-                suggested_action="在同一文档中明确其仅为场景内调度器示例。",
+                file=readme_label,
+                summary="缺少 docs/CONSISTENCY_VALIDATION.md 的入口引用。",
+                why_it_matters="README 缺少入口引用会增加一致性校验规范的发现成本。",
+                suggested_action="在 README.md 中加入 docs/CONSISTENCY_VALIDATION.md 的入口链接。",
             )
         )
 
-    if "docs/ORCHESTRATOR_PROMPT_CONTRACT.md" not in content:
-        findings.append(
-            Finding(
-                level="L1",
-                category="docs",
-                file=file_label,
-                summary="缺少对 ORCHESTRATOR_PROMPT_CONTRACT 的回指。",
-                why_it_matters="总调度规则与 prompt 契约无法建立双文档锚点，容易出现双重真源。",
-                suggested_action="在 ORCHESTRATION.md 中加入对 docs/ORCHESTRATOR_PROMPT_CONTRACT.md 的引用。",
-            )
+    roadmap_label = "docs/ROADMAP.md"
+    roadmap_content = docs_content.get(roadmap_label)
+    if roadmap_content is not None:
+        has_consistency_validation_ref = "docs/CONSISTENCY_VALIDATION.md" in roadmap_content
+        has_validation_template_anchor = (
+            "validation-findings" in roadmap_content
+            or "consistency-review-checklist" in roadmap_content
         )
+        if not (has_consistency_validation_ref or has_validation_template_anchor):
+            findings.append(
+                Finding(
+                    level="L2",
+                    category="docs",
+                    file=roadmap_label,
+                    summary="缺少一致性校验文档或 validation 模板锚点引用。",
+                    why_it_matters="ROADMAP 无校验锚点会削弱路线图与一致性治理流程的对齐。",
+                    suggested_action="在 docs/ROADMAP.md 中加入 docs/CONSISTENCY_VALIDATION.md 或 validation 模板锚点引用。",
+                )
+            )
+
+    consistency_validation_label = "docs/CONSISTENCY_VALIDATION.md"
+    consistency_validation_content = docs_content.get(consistency_validation_label)
+    if consistency_validation_content is not None:
+        if "docs 真源层" not in consistency_validation_content:
+            findings.append(
+                Finding(
+                    level="L1",
+                    category="docs",
+                    file=consistency_validation_label,
+                    summary="缺少“docs 真源层”锚点。",
+                    why_it_matters="一致性规范若缺失真源层锚点，会导致 docs scope 判定基准不稳定。",
+                    suggested_action="在 docs/CONSISTENCY_VALIDATION.md 中补充“docs 真源层”表述。",
+                )
+            )
+        if not all(level in consistency_validation_content for level in LEVEL_ORDER):
+            findings.append(
+                Finding(
+                    level="L1",
+                    category="docs",
+                    file=consistency_validation_label,
+                    summary="缺少 L1/L2/L3 分级锚点。",
+                    why_it_matters="未声明完整分级集合会削弱一致性校验结果的可对齐性。",
+                    suggested_action="在 docs/CONSISTENCY_VALIDATION.md 中补齐 L1 / L2 / L3 明确表述。",
+                )
+            )
 
     return findings
 
