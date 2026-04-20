@@ -62,6 +62,8 @@
 - [x] 增加 `validation-findings.md`
 - [x] `docs/templates/skill-routing-matrix.md` 作为案例层模板继续复用
 - [x] 增加 orchestrator dispatch plan 模板
+- [x] 当前本地一致性校验 CLI 已接入最小 GitHub 门禁 workflow（PR / main）
+- [x] 第一版仅做严格阻断，不含 artifact / summary / matrix 增强
 - [ ] `Scenario / Phase / Domain Specialist / Artifact` 一致性校验
 - [ ] `incident workflow` 示例任务回归测试
 

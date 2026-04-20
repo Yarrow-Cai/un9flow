@@ -1,0 +1,51 @@
+name: consistency-validation
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  validate-consistency:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Detect relevant changes
+        id: changes
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            base_sha="${{ github.event.pull_request.base.sha }}"
+          else
+            base_sha="${{ github.event.before }}"
+          fi
+
+          if [ -z "$base_sha" ] || [ "$base_sha" = "0000000000000000000000000000000000000000" ]; then
+            base_sha="$(git rev-list --max-parents=0 HEAD)"
+          fi
+
+          relevant_path_globs='docs/** skills/** tools/** .github/workflows/** README.md'
+          relevant_paths_regex='(docs/|skills/|tools/|\.github/workflows/|(^|[[:space:]])README\.md([[:space:]]|$))'
+
+          if git diff --name-status --find-renames "$base_sha" "${{ github.sha }}" | grep -E "(^|[[:space:]])$relevant_paths_regex" >/dev/null; then
+            echo "has_relevant_changes=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_relevant_changes=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/setup-python@v5
+        if: steps.changes.outputs.has_relevant_changes == 'true'
+        with:
+          python-version: '3.11'
+
+      - name: Run consistency validation
+        if: steps.changes.outputs.has_relevant_changes == 'true'
+        run: python tools/validate_consistency.py
+
+      - name: Skip consistency validation when no relevant changes
+        if: steps.changes.outputs.has_relevant_changes != 'true'
+        run: echo "No relevant changes, skipping validation."

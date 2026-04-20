@@ -50,6 +50,7 @@
 - `skills/`：首批正式 skill 文件目录（含 `skills/orchestration/SKILL.md` 总入口，以及主场景/辅助入口 skill），用于承接路由、场景执行与产物补齐。
 - `docs/ORCHESTRATOR_PROMPT_CONTRACT.md`：un9flow orchestrator 与 scenario prompt 的输入输出与控制信号约束，定义统一**调度协议**。
 - `docs/CONSISTENCY_VALIDATION.md`：docs / skills / templates / cases / 过程文档的统一一致性校验总文档
+- `.github/workflows/consistency-validation.yml`：当前一致性校验 CLI 的 PR / main 门禁 workflow
 - `docs/PLATFORMS.md`：目标平台与后续接入方向
 - `docs/ROADMAP.md`：版本路线图
 - `docs/templates/`：incident / orchestrator / consistency 模板（incident summary、evidence package、diagnosis pack、review memo；orchestrator-routing-matrix、orchestrator-dispatch-plan、prompt-contract-checklist、skill-boundary-checklist、skill-routing-matrix、consistency-review-checklist、validation-findings）
@@ -90,6 +91,9 @@ un9flow/
 ├── README.md
 ├── .gitignore
 ├── AGENTS.md
+├── .github/
+│   └── workflows/
+│       └── consistency-validation.yml
 ├── docs/
 │   ├── PHILOSOPHY.md
 │   ├── WORKFLOW.md
