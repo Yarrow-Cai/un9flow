@@ -47,6 +47,8 @@
 - `docs/INCIDENT_WORKFLOW.md`：incident-first 故障排查工作流基线
 - `docs/ORCHESTRATION.md`：三场景并列的 orchestrator 总调度规则；负责总调度规则，`docs/INCIDENT_WORKFLOW.md` 负责 incident 场景专属闭环。
 - `docs/SKILL_ARCHITECTURE.md`：总入口、三子入口与辅助 skill 的结构关系与边界基线；作为 skill **入口规范**（`SKILL.md` 前置基线）。
+- `docs/WATCHDOG_TIMEOUT_AUDIT.md`：`design-safety-review` 下的 watchdog / timeout 专项审计方法真源
+- `docs/templates/watchdog-timeout-audit-checklist.md`：watchdog / timeout 专项审计检查清单模板（轻量检查导向，承接方法真源）
 - `skills/`：首批正式 skill 文件目录（含 `skills/orchestration/SKILL.md` 总入口，以及主场景/辅助入口 skill），用于承接路由、场景执行与产物补齐。
 - `docs/ORCHESTRATOR_PROMPT_CONTRACT.md`：un9flow orchestrator 与 scenario prompt 的输入输出与控制信号约束，定义统一**调度协议**。
 - `docs/CONSISTENCY_VALIDATION.md`：docs / skills / templates / cases / 过程文档的统一一致性校验总文档
@@ -104,7 +106,9 @@ un9flow/
 │   ├── SKILL_ARCHITECTURE.md
 │   ├── ORCHESTRATOR_PROMPT_CONTRACT.md
 │   ├── CONSISTENCY_VALIDATION.md
+│   ├── WATCHDOG_TIMEOUT_AUDIT.md
 │   ├── templates/
+│   │   ├── watchdog-timeout-audit-checklist.md
 │   │   ├── incident-summary.md
 │   │   ├── evidence-package.md
 │   │   ├── incident-diagnosis-pack.md
@@ -144,6 +148,8 @@ un9flow/
 - 第一阶段仅对齐 workflow orchestration 思路、Claude Code / skill 入口习惯与后续目录组织方式
 - `gstack-compatible first` 仅指上述三类对齐，不承诺现阶段具备安装器、分发、目录映射或广泛 host 兼容能力
 - 先形成稳定文档基线，再进入工具化与 skill 化
+
+当前已落地 `docs/WATCHDOG_TIMEOUT_AUDIT.md` 与 `docs/templates/watchdog-timeout-audit-checklist.md`，作为 watchdog / timeout 专项方法与 checklist 基线。
 
 后续再逐步补齐：
 
