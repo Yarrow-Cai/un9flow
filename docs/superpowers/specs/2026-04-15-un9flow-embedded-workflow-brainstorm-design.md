@@ -128,7 +128,7 @@ Scenario 入口
 
 ### 3.1 顶层 orchestrator
 
-- `incident-orchestrator`
+- `incident-orchestrator`（incident 场景内调度器示例）
 
 ### 3.2 第一批 scenario skill
 
@@ -397,7 +397,7 @@ Incident Intake
 - `evidence-pack`
 - `evidence-gap-note`
 
-### 6.3 `incident-orchestrator` agent
+### 6.3 `incident-orchestrator` agent（incident 场景内调度器示例）
 
 **输入**
 
@@ -574,7 +574,7 @@ Incident Intake
 将当前“能力域定义”收敛为：
 
 - 定义 `incident-investigation` 场景规格
-- 定义 `incident-orchestrator` 职责边界
+- 定义 `incident-orchestrator` 作为 incident 场景内调度器示例的职责边界
 - 定义 5 个 specialist 的输入 / 输出契约
 - 定义第一批 artifact 模板
 - 固化 scenario / phase / domain / artifact 命名规则
@@ -586,7 +586,7 @@ Incident Intake
 1. `incident-investigation`
 2. `evidence-pack`
 3. `incident-review`
-4. `incident-orchestrator` 的调度规则
+4. `incident-orchestrator` 的场景内调度规则
 5. 5 个 domain specialist
 
 目标是跑通第一条 embedded incident workflow，而不是堆很多 SKILL.md。
