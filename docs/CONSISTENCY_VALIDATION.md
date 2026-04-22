@@ -29,6 +29,41 @@
 2. skills 层只能映射，不得反向定义规则。
 3. 模板 / 案例 / 过程文档只允许继承或验证，不允许发明新规则。
 
+## Domain Specialist 方法真源规则
+
+1. Domain Specialist 的独立方法真源文档（例如 `docs/WATCHDOG_TIMEOUT_AUDIT.md`、`docs/REGISTER_STATE_AUDIT.md`）属于 docs 层受控对象。
+2. 若某个 Domain Specialist 存在独立方法真源，该方法真源文档必须回指：
+   - `docs/DOMAIN_SPECIALIST_CONTRACTS.md`
+   - 至少一个复用该方法的主场景文档
+   - 对应的 `docs/templates/*-pack.md`
+3. 对应的 `skills/**/SKILL.md` 必须回指该方法真源文档。
+4. 对应的 `docs/templates/*-pack.md` 必须回指该方法真源文档。
+
+### Register 方法真源规则（register-state-auditor）
+
+1. `docs/REGISTER_STATE_AUDIT.md` 是 `register-state-auditor` 的方法真源文档。
+2. `docs/REGISTER_STATE_AUDIT.md` 必须回指：
+   - `docs/DOMAIN_SPECIALIST_CONTRACTS.md`
+   - `docs/INCIDENT_WORKFLOW.md`
+   - `docs/DESIGN_SAFETY_REVIEW.md`
+   - `docs/templates/register-state-audit-pack.md`
+3. `skills/register-state-auditor/SKILL.md` 必须回指 `docs/REGISTER_STATE_AUDIT.md`。
+4. `docs/templates/register-state-audit-pack.md` 必须回指 `docs/REGISTER_STATE_AUDIT.md`。
+5. `README.md` 必须将 `docs/REGISTER_STATE_AUDIT.md` 暴露为仓库文档入口之一。
+
+### ISR / main loop 冲突归属规则（timing-watchdog-auditor）
+
+1. `isr-mainloop-conflict-note` 是 `timing-watchdog-auditor` 的 canonical Artifact，不单独派生新的 `Domain Specialist`。
+2. `docs/WATCHDOG_TIMEOUT_AUDIT.md` 必须显式包含 `ISR / main loop 职责冲突` 专项说明。
+3. `skills/timing-watchdog-auditor/SKILL.md` 必须显式声明 ISR / main loop 冲突检查属于该能力线内的 `线内专项扩展`。
+4. `docs/templates/timing-watchdog-audit-pack.md` 必须为 `isr-mainloop-conflict-note` 提供专属证据字段，至少包含：
+   - `- ISR 侧职责:`
+   - `- main loop 侧职责:`
+   - `- 被破坏的确定性约束:`
+   - `- 可能导致的 reset / timeout / 饥饿风险:`
+   - `- 仍缺的证据:`
+5. `docs/DOMAIN_SPECIALIST_CONTRACTS.md` 必须说明该 Artifact 归属 `timing-watchdog-auditor`，并声明 `不得拆成新的 specialist`。
+
 ## 每层校验职责
 
 - **docs：规则完整性**

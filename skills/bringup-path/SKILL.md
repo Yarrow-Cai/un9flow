@@ -1,3 +1,8 @@
+---
+name: bringup-path
+description: Drive first-time board, link, or module bring-up by establishing a deterministic baseline before deeper diagnosis.
+---
+
 # bringup-path
 
 ## 目标

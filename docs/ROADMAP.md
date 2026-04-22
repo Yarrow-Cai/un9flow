@@ -19,12 +19,12 @@
 - [x] 落地 `incident-investigation` 场景规格基线
 - [x] 落地 `incident-orchestrator` 职责边界基线
 - [x] 落地 `docs/ORCHESTRATION.md` 作为总调度文档
-- [ ] 先固化 `docs/SKILL_ARCHITECTURE.md` 中的总入口 / 三子入口 / 辅助 skill 边界（作为正式 `SKILL.md` 前置**入口规范**）
-- [ ] 先固化 `docs/ORCHESTRATOR_PROMPT_CONTRACT.md` 的调度协议，再落地 host 侧 prompt 绑定文件。
-- [ ] 定义 5 个 `Domain Specialist` 的输入 / 输出契约（含 `signal-path-tracer`）
+- [x] 先固化 `docs/SKILL_ARCHITECTURE.md` 中的总入口 / 三子入口 / 辅助 skill 边界（作为正式 `SKILL.md` 前置**入口规范**，见 `## 入口规范定位` / `## 入口边界矩阵` / `## 与调度协议的分工`）
+- [x] 先固化 `docs/ORCHESTRATOR_PROMPT_CONTRACT.md` 的调度协议，再落地 host 侧 prompt 绑定文件（见 `## 调度协议定位` 与 `## host 侧 prompt 绑定前置约束`）。
+- [x] 定义 5 个 `Domain Specialist` 的输入 / 输出契约（含 `signal-path-tracer`，见 `docs/DOMAIN_SPECIALIST_CONTRACTS.md`）
 - [x] 落地第一批 `Artifact` 模板基线（如 `incident-summary`、`evidence-package`、`incident-review-memo`）
-- [ ] 固化 `Scenario / Phase / Domain Specialist / Artifact` 命名规则
-- [ ] 固定第一条 incident pipeline 的输入输出边界，禁止混淆 skill 与 artifact 角色
+- [x] 固化 `Scenario / Phase / Domain Specialist / Artifact` 命名规则（见 `docs/ORCHESTRATION.md`、`docs/ORCHESTRATOR_PROMPT_CONTRACT.md`、`docs/DOMAIN_SPECIALIST_CONTRACTS.md`）
+- [x] 固定第一条 incident pipeline 的输入输出边界，禁止混淆 skill 与 artifact 角色（见 `docs/INCIDENT_WORKFLOW.md`）
 
 ## v2 - incident pipeline skill 化
 
@@ -32,12 +32,12 @@
 
 计划方向：
 
-- [ ] 落地 `incident-investigation`
-- [ ] 落地 `evidence-pack`
-- [ ] 落地 `incident-review`
-- [ ] 落地 `incident-orchestrator` 调度规则
+- [x] 落地 `incident-investigation`
+- [x] 落地 `evidence-pack`
+- [x] 落地 `incident-review`
+- [x] 落地 `incident-orchestrator` 调度规则
 - [x] 以 `docs/ORCHESTRATION.md` 为总调度基线，以 scenario 文档（如 `docs/INCIDENT_WORKFLOW.md`）为下层场景基线
-- [ ] 落地 5 个 `Domain Specialist`
+- [x] 落地 5 个 `Domain Specialist`
 
 ## v3 - host 接入
 
@@ -45,9 +45,9 @@
 
 计划方向：
 
-- [ ] 第一阶段仅对齐 workflow orchestration 思路、Claude Code / skill 入口习惯与后续目录组织方式
-- [ ] `gstack-compatible first` 仅指以上对齐层，不承诺现阶段具备安装器、分发、目录映射或广泛 host 兼容能力
-- [ ] OpenClaw 作为外层调度预留位
+- [x] 第一阶段仅对齐 workflow orchestration 思路、Claude Code / skill 入口习惯与后续目录组织方式（见 `docs/PLATFORMS.md`）
+- [x] `gstack-compatible first` 仅指以上对齐层，不承诺现阶段具备安装器、分发、目录映射或广泛 host 兼容能力（见 `docs/PLATFORMS.md`）
+- [x] OpenClaw 作为外层调度预留位（见 `docs/PLATFORMS.md`）
 
 ## v4 - 生成与校验体系
 
@@ -55,8 +55,8 @@
 
 计划方向：
 
-- [ ] 模板化能力文档（基于 `Artifact` 模板）
-- [ ] 文档生成脚本（覆盖 incident workflow 主线）
+- [x] 模板化能力文档（基于 `Artifact` 模板，见 `docs/templates/*-pack.md`）
+- [x] 文档生成脚本（覆盖 incident workflow 主线，见 `tools/generate_incident_case_bundle.py`）
 - [x] 落地 `docs/CONSISTENCY_VALIDATION.md` 统一校验基线
 - [x] 增加 `consistency-review-checklist.md`
 - [x] 增加 `validation-findings.md`
@@ -64,8 +64,8 @@
 - [x] 增加 orchestrator dispatch plan 模板
 - [x] 当前本地一致性校验 CLI 已接入最小 GitHub 门禁 workflow（PR / main）
 - [x] 第一版仅做严格阻断，不含 artifact / summary / matrix 增强
-- [ ] `Scenario / Phase / Domain Specialist / Artifact` 一致性校验
-- [ ] `incident workflow` 示例任务回归测试
+- [x] `Scenario / Phase / Domain Specialist / Artifact` 一致性校验
+- [x] `incident workflow` 示例任务回归测试（见 `docs/cases/incident-workflow-routing-regression.md` 与 `docs/cases/incident-workflow-dispatch-regression.md`）
 
 ## v5 - 嵌入式专用能力
 
@@ -73,9 +73,9 @@
 
 计划方向：
 
-- [ ] 功能安全 review 能力（按 Domain Specialist 输出要求对齐 incident-first）
-- [ ] 寄存器审计能力（对接 `incident workflow` 中对应 Artifact）
-- [ ] ISR / 主循环职责冲突检查（沿 `Domain Specialist` 与 `Artifact` 主线延展）
+- [x] 功能安全 review 能力（按 Domain Specialist 输出要求对齐 incident-first，见 `docs/DESIGN_SAFETY_REVIEW.md`）
+- [x] 寄存器审计能力基线已落地：`docs/REGISTER_STATE_AUDIT.md` 作为方法真源，`docs/templates/register-state-audit-pack.md` 作为 specialist pack 模板
+- [x] ISR / 主循环职责冲突检查已作为 `timing-watchdog-auditor` 线内专项扩展固化，沿 `Domain Specialist` 与 `Artifact` 主线延展
 - [x] 看门狗与超时策略审计专项基线已落地：`docs/WATCHDOG_TIMEOUT_AUDIT.md` 作为方法真源，`docs/templates/watchdog-timeout-audit-checklist.md` 作为 checklist 模板
 - [ ] 看门狗与超时策略正式 skill / findings / CI 集成留待后续阶段扩展
 - [ ] 菊花链 / isoSPI / AFE bring-up 模板

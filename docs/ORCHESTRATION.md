@@ -82,6 +82,9 @@
   - 在证据链明显不足时给“通过”结论。
 
 ## 默认场景骨架与 specialist 装配
+
+- 5 个 `Domain Specialist` 的输入 / 输出契约、禁止项与回交条件统一见 `docs/DOMAIN_SPECIALIST_CONTRACTS.md`；本文件只定义“何时分派谁”，不重写 specialist 内部协议。
+
 - `incident-investigation`
   - 默认 Phase：`hazard-analysis -> link-diagnostics -> deterministic-foundation -> failsafe-validation`
   - 默认 specialist：

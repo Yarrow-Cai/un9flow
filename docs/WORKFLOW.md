@@ -96,6 +96,8 @@ hazard-analysis -> link-diagnostics -> failsafe-validation -> deterministic-foun
 hazard-analysis -> deterministic-foundation -> failsafe-validation
 ```
 
+- 场景真源见 `docs/DESIGN_SAFETY_REVIEW.md`
+
 ### incident-first 调度结构
 
 - Scenario 入口：`incident-investigation`
@@ -103,6 +105,8 @@ hazard-analysis -> deterministic-foundation -> failsafe-validation
 - Phase 仍沿用：`hazard-analysis` / `deterministic-foundation` / `link-diagnostics` / `failsafe-validation`
 - Domain Specialist 负责具体证据分析，不由 orchestrator 吞并
 - 最终必须产出 reviewable artifacts（可复核工件）
+- 场景内输入 / 输出边界与交接规则见 `docs/INCIDENT_WORKFLOW.md`
+- 5 个 `Domain Specialist` 的契约真源见 `docs/DOMAIN_SPECIALIST_CONTRACTS.md`
 
 ### 典型闭环
 

@@ -1,3 +1,8 @@
+---
+name: design-safety-review
+description: Review design-time safety boundaries, convergence strategy, and timeout or watchdog or failsafe constraints before deployment.
+---
+
 # design-safety-review
 
 ## 目标

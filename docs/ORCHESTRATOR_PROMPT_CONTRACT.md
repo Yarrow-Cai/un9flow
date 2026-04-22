@@ -4,6 +4,12 @@
 
 固定 orchestrator / scenario prompt 的统一协议层：定义输入/输出字段、控制信号和硬约束，防止 prompt 在执行中重写 skill 边界，也不越权改写总调度规则。
 
+## 调度协议定位
+
+- `docs/ORCHESTRATOR_PROMPT_CONTRACT.md` 只定义 orchestrator / scenario prompt 的**调度协议**，不重写 `docs/SKILL_ARCHITECTURE.md` 中的入口边界。
+- `Routing Result`、`Phase Plan`、`Dispatch Plan`、`Control Result` 构成 host 侧 prompt 绑定前必须稳定的最小协议面。
+- host 侧 prompt 绑定文件未来只能映射这些字段与控制信号，不得新增未定义层级、未定义 control signal 或跳过既定 review gate。
+
 ## 输入协议
 
 ### Case Input
@@ -81,3 +87,11 @@
 - 场景子 prompt 可以补强 specialist 偏向。
 - 场景子 prompt 不可重写总路由规则。
 - 场景子 prompt 不可改写总控制信号协议。
+
+## host 侧 prompt 绑定前置约束
+
+- 任何 host 侧 prompt 绑定文件都必须完整承接 `Case Input`、`Normalized Case`、`Routing Context` 与 `Control Context`。
+- 任何 host 侧 prompt 绑定文件都必须返回 `Routing Result`、`Phase Plan`、`Dispatch Plan` 与 `Control Result` 四段协议结果。
+- host 侧 prompt 绑定文件只能映射 canonical `Scenario / Phase / Domain Specialist / Artifact / control signal`，不得引入平行命名体系。
+- 若 host 只支持部分字段，必须做保守降级并显式暴露 `missing_evidence` 或 `unresolved_gaps`，不能静默省略协议字段。
+- 在未提供正式 host binding 文档前，所有实现都以本文件为唯一 prompt 协议真源。

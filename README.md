@@ -6,7 +6,7 @@
 
 `un9flow` 是一个面向**嵌入式系统 / 电力电子 / BMS / 功能安全场景**的项目仓库。
 
-当前阶段，它还是一个**方法论文档仓库**，用于沉淀哲学、约束、工作流与平台方向；目前已落地第一批正式 `SKILL.md`（总入口与主场景/辅助入口），仅用于方法论与边界定义，但**尚未发布可安装的 skills**。
+当前阶段，它以**文档真源 + 正式 skill 入口文件 + 一致性校验基线**为主：已经落地第一批正式 `SKILL.md`、incident / orchestrator / consistency / watchdog 相关模板与方法基线，以及本地 `consistency validation` CLI 与 GitHub workflow；但**尚未进入可安装分发阶段**。
 
 ## 项目定位
 
@@ -45,17 +45,23 @@
 - `docs/PHILOSOPHY.md`：开发哲学
 - `docs/WORKFLOW.md`：方法论工作流
 - `docs/INCIDENT_WORKFLOW.md`：incident-first 故障排查工作流基线
+- `docs/DESIGN_SAFETY_REVIEW.md`：design-safety-review 主场景真源，固定功能安全复核的 phase / specialist / artifact 对齐关系
 - `docs/ORCHESTRATION.md`：三场景并列的 orchestrator 总调度规则；负责总调度规则，`docs/INCIDENT_WORKFLOW.md` 负责 incident 场景专属闭环。
+- `docs/DOMAIN_SPECIALIST_CONTRACTS.md`：5 个 `Domain Specialist` 的输入 / 输出契约、禁止项与回交条件真源
 - `docs/SKILL_ARCHITECTURE.md`：总入口、三子入口与辅助 skill 的结构关系与边界基线；作为 skill **入口规范**（`SKILL.md` 前置基线）。
 - `docs/WATCHDOG_TIMEOUT_AUDIT.md`：`design-safety-review` 下的 watchdog / timeout 专项审计方法真源
+- `docs/REGISTER_STATE_AUDIT.md`：`register-state-auditor` 的寄存器审计方法真源，固定默认值 / 目标值 / 当前值 / 复位后值、位语义与复位返回风险的复核方式
 - `docs/templates/watchdog-timeout-audit-checklist.md`：watchdog / timeout 专项审计检查清单模板（轻量检查导向，承接方法真源）
-- `skills/`：首批正式 skill 文件目录（含 `skills/orchestration/SKILL.md` 总入口，以及主场景/辅助入口 skill），用于承接路由、场景执行与产物补齐。
+- `skills/`：首批正式 skill 文件目录（含 `skills/orchestration/SKILL.md` 总入口、主场景 / 辅助入口 skill，以及 5 个 `Domain Specialist` skill），用于承接路由、场景执行与产物补齐。
 - `docs/ORCHESTRATOR_PROMPT_CONTRACT.md`：un9flow orchestrator 与 scenario prompt 的输入输出与控制信号约束，定义统一**调度协议**。
 - `docs/CONSISTENCY_VALIDATION.md`：docs / skills / templates / cases / 过程文档的统一一致性校验总文档
+- `tools/validate_consistency.py`：当前本地一致性校验 CLI
+- `tools/generate_incident_case_bundle.py`：基于现有模板生成 incident workflow 主线文档 bundle 的脚本
 - `.github/workflows/consistency-validation.yml`：当前一致性校验 CLI 的 PR / main 门禁 workflow
 - `docs/PLATFORMS.md`：目标平台与后续接入方向
 - `docs/ROADMAP.md`：版本路线图
-- `docs/templates/`：incident / orchestrator / consistency 模板（incident summary、evidence package、diagnosis pack、review memo；orchestrator-routing-matrix、orchestrator-dispatch-plan、prompt-contract-checklist、skill-boundary-checklist、skill-routing-matrix、consistency-review-checklist、validation-findings）
+- `docs/cases/`：incident workflow 回归样本（入口路由与 dispatch 期望基线）
+- `docs/templates/`：incident / orchestrator / consistency / specialist 输出模板（incident summary、evidence package、diagnosis pack、review memo；orchestrator-routing-matrix、orchestrator-dispatch-plan、prompt-contract-checklist、skill-boundary-checklist、skill-routing-matrix、consistency-review-checklist、validation-findings，以及 5 个 `*-pack.md` specialist 输出模板）
 - `AGENTS.md`：仓库内协作约束
 
 ## 规划中的能力域
@@ -100,19 +106,29 @@ un9flow/
 │   ├── PHILOSOPHY.md
 │   ├── WORKFLOW.md
 │   ├── INCIDENT_WORKFLOW.md
+│   ├── DESIGN_SAFETY_REVIEW.md
 │   ├── ORCHESTRATION.md
+│   ├── DOMAIN_SPECIALIST_CONTRACTS.md
 │   ├── PLATFORMS.md
 │   ├── ROADMAP.md
 │   ├── SKILL_ARCHITECTURE.md
 │   ├── ORCHESTRATOR_PROMPT_CONTRACT.md
 │   ├── CONSISTENCY_VALIDATION.md
 │   ├── WATCHDOG_TIMEOUT_AUDIT.md
+│   ├── cases/
+│   │   ├── incident-workflow-routing-regression.md
+│   │   └── incident-workflow-dispatch-regression.md
 │   ├── templates/
 │   │   ├── watchdog-timeout-audit-checklist.md
 │   │   ├── incident-summary.md
 │   │   ├── evidence-package.md
 │   │   ├── incident-diagnosis-pack.md
 │   │   ├── incident-review-memo.md
+│   │   ├── signal-path-trace-pack.md
+│   │   ├── register-state-audit-pack.md
+│   │   ├── state-machine-trace-pack.md
+│   │   ├── timing-watchdog-audit-pack.md
+│   │   ├── failsafe-convergence-review-pack.md
 │   │   ├── orchestrator-routing-matrix.md
 │   │   ├── orchestrator-dispatch-plan.md
 │   │   ├── prompt-contract-checklist.md
@@ -123,6 +139,9 @@ un9flow/
 │   └── superpowers/
 │       ├── specs/
 │       └── plans/
+├── tools/
+│   ├── validate_consistency.py
+│   └── generate_incident_case_bundle.py
 └── skills/
     ├── orchestration/
     │   └── SKILL.md
@@ -134,30 +153,60 @@ un9flow/
     │   └── SKILL.md
     ├── evidence-pack/
     │   └── SKILL.md
-    └── incident-review/
+    ├── incident-review/
+    │   └── SKILL.md
+    ├── signal-path-tracer/
+    │   └── SKILL.md
+    ├── register-state-auditor/
+    │   └── SKILL.md
+    ├── state-machine-tracer/
+    │   └── SKILL.md
+    ├── timing-watchdog-auditor/
+    │   └── SKILL.md
+    └── failsafe-convergence-reviewer/
         └── SKILL.md
 ```
 
-## 当前阶段目标
+## 当前完成情况
 
-当前阶段优先完成以下事情：
+### 已完成
 
-- 建立哲学与约束边界
-- 建立工作流阶段定义
-- 明确 `Scenario / Phase / Domain Specialist / Artifact` 命名规则
-- 第一阶段仅对齐 workflow orchestration 思路、Claude Code / skill 入口习惯与后续目录组织方式
-- `gstack-compatible first` 仅指上述三类对齐，不承诺现阶段具备安装器、分发、目录映射或广泛 host 兼容能力
-- 先形成稳定文档基线，再进入工具化与 skill 化
+- 已建立 README、哲学、工作流、平台、路线图、orchestration、prompt contract、skill architecture 等文档基线
+- 已落地首批正式 `skills/` 入口文件（总入口 + 主场景 / 辅助入口）
+- 已落地 5 个 `Domain Specialist` 正式 skill 文件，与 `docs/DOMAIN_SPECIALIST_CONTRACTS.md` 保持一一映射
+- 已补齐第一批 incident / orchestrator / consistency / watchdog 相关模板与方法真源
+- 已落地 `docs/cases/incident-workflow-routing-regression.md` 与 `docs/cases/incident-workflow-dispatch-regression.md`，作为 incident workflow 示例任务回归基线
+- 已落地 5 个 `Domain Specialist` 输出模板（`docs/templates/*-pack.md`），承接 specialist Artifact、置信度、缺口与回交建议
+- 仓库当前已包含本地 `consistency validation` CLI（`tools/validate_consistency.py`）与最小 GitHub workflow 门禁（`.github/workflows/consistency-validation.yml`）
+- 已落地 `tools/generate_incident_case_bundle.py`，可基于现有模板生成 incident workflow 主线文档 bundle
+- 已落地 `docs/WATCHDOG_TIMEOUT_AUDIT.md` 与 `docs/templates/watchdog-timeout-audit-checklist.md`，作为 watchdog / timeout 专项方法与 checklist 基线
+- 已固化 `docs/DOMAIN_SPECIALIST_CONTRACTS.md` 与 `docs/INCIDENT_WORKFLOW.md` 中的第一批 `Domain Specialist` 契约及 incident pipeline 输入输出边界
+- 已在 `docs/PLATFORMS.md` 固化第一阶段 host 对齐边界、`gstack-compatible first` 非承诺项与 `OpenClaw` 预留位
+- 已落地 `docs/DESIGN_SAFETY_REVIEW.md`，把 design-time safety review 的 phase / specialist / Artifact 对齐固定为主场景真源
 
-当前已落地 `docs/WATCHDOG_TIMEOUT_AUDIT.md` 与 `docs/templates/watchdog-timeout-audit-checklist.md`，作为 watchdog / timeout 专项方法与 checklist 基线。
+### 进行中
 
-后续再逐步补齐：
+- 继续从文档真源推进到 incident pipeline 的完整 skill 化
+- 继续把文档生成脚本与更完整回归校验补齐
+- 继续收敛 orchestration 边界、场景职责与校验规则之间的一致性
+
+### 规划中
 
 - host 安装与分发能力
-- 多 host 安装器
-- 模板生成体系
-- 专用 safety review / register audit 能力
+- 多 host 接入 / 安装器
+- 模板生成体系与更完整的回归校验
+- 专用 safety review / register audit 能力扩展
 - 失效模式与寄存器图谱生成工具
+- 示例与实战案例
+
+## 当前阶段重点
+
+当前阶段重点不是扩大发布面，而是继续把以下基线钉稳：
+
+- 稳定 incident-first 与 orchestration 的文档真源
+- 把正式 `SKILL.md` 入口、模板与一致性校验继续对齐
+- 在不夸大 host 兼容与安装能力的前提下，逐步推进 tool 化与 skill 化
+- 先把方法边界、命名纪律、调度协议和 reviewable artifacts 讲清、定稳、再继续向外扩展
 
 ## 演进顺序
 

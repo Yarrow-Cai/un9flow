@@ -1,3 +1,8 @@
+---
+name: evidence-pack
+description: Organize incident evidence, identify evidence gaps, and produce a structured evidence package for the incident workflow.
+---
+
 # evidence-pack
 
 ## 目标

@@ -1,3 +1,8 @@
+---
+name: incident-review
+description: Provide a second-opinion review of the current incident evidence chain before closure or escalation.
+---
+
 # incident-review
 
 ## 目标

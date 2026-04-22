@@ -84,6 +84,8 @@ Incident Intake
 
 ## skill / agent 契约
 
+- 5 个 `Domain Specialist` 的完整输入 / 输出契约、禁止项与回交条件统一见 `docs/DOMAIN_SPECIALIST_CONTRACTS.md`；本节只保留 incident 场景内的落点摘要。
+
 - `incident-investigation`
   - 输入：故障现象、触发条件、影响范围、已知证据、风险认知、安全态状态
   - 输出：`incident-summary`、`evidence-inventory`、`missing-evidence-list`、`initial-risk-note`
@@ -114,6 +116,17 @@ Incident Intake
 
 - `incident-review`
   - 输出：`incident-review-memo`、`confidence-gap-summary`、`recommended-next-action`
+
+## incident pipeline 输入输出边界
+
+- 完整 specialist 契约真源在 `docs/DOMAIN_SPECIALIST_CONTRACTS.md`；本节只固定 incident 场景里的交接边界，防止把 skill、specialist 与 Artifact 混成一层。
+- `incident-investigation` 负责 intake、初始风险边界与证据盘点；它的输出是 `incident-summary`、`evidence-inventory`、`missing-evidence-list`、`initial-risk-note`，而不是最终审计结论。
+- `evidence-pack` 只负责把杂乱证据整理成 `evidence-package`；它是辅助 skill，不是 `Artifact` 名称，也不是根因裁决器。
+- `incident-orchestrator` 只消费已归一化的 `incident-summary`、`evidence-package` 与风险边界，负责 phase 排序、specialist 分派与 `incident-diagnosis-pack` 汇总。
+- `Domain Specialist` 只消费 `incident-orchestrator` 交付的 `phase objective`、`dispatch reason`、`evidence-package` 与相关上游 Artifact；它们只产出各自证据域的 Artifact，不直接冒充 `incident-investigation`、`evidence-pack` 或 `incident-review`。
+- `incident-review` 只对 `incident-diagnosis-pack`、未解释缺口与当前风险边界做 second opinion，输出 `incident-review-memo`；它不替代 `design-safety-review`。
+- `skill` 名称不等于 `Artifact` 名称；`Artifact` 名称只用于可审计工件，不用于路由入口。
+- `specialist` 名称只属于 `Domain Specialist` 层；若需要补证据或换轨，必须回交给 `incident-orchestrator`，不能越级改写场景入口。
 
 ## 命名与分层约束（继承总则）
 

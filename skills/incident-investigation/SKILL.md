@@ -1,3 +1,8 @@
+---
+name: incident-investigation
+description: Investigate active incidents in an already-running system by narrowing symptoms, evidence, and root-cause direction.
+---
+
 # incident-investigation
 
 ## 目标
