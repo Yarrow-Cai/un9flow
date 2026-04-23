@@ -863,6 +863,25 @@ def check_docs() -> list[Finding]:
                 )
             )
 
+        missing_watchdog_formal_refs = _find_missing_semantics(
+            watchdog_timeout_content,
+            {
+                "watchdog formal skill ref": "skills/watchdog-timeout-audit/SKILL.md",
+                "watchdog findings template ref": "docs/templates/watchdog-timeout-audit-findings.md",
+            },
+        )
+        if missing_watchdog_formal_refs:
+            findings.append(
+                Finding(
+                    level="L2",
+                    category="docs",
+                    file=watchdog_timeout_label,
+                    summary=f"watchdog 专项方法真源缺少 formal skill / findings 回指：{', '.join(missing_watchdog_formal_refs)}。",
+                    why_it_matters="若方法真源不回指 formal skill 与轻量 findings 模板，watchdog 专项入口与结果收口对象将无法形成闭环映射。",
+                    suggested_action="在 docs/WATCHDOG_TIMEOUT_AUDIT.md 中补齐对 skills/watchdog-timeout-audit/SKILL.md 与 docs/templates/watchdog-timeout-audit-findings.md 的引用。",
+                )
+            )
+
         if "ISR / main loop 职责冲突" not in watchdog_timeout_content:
             findings.append(
                 Finding(
@@ -995,6 +1014,7 @@ def check_skills() -> list[Finding]:
         "skills/state-machine-tracer/SKILL.md": ROOT / "skills" / "state-machine-tracer" / "SKILL.md",
         "skills/timing-watchdog-auditor/SKILL.md": ROOT / "skills" / "timing-watchdog-auditor" / "SKILL.md",
         "skills/failsafe-convergence-reviewer/SKILL.md": ROOT / "skills" / "failsafe-convergence-reviewer" / "SKILL.md",
+        "skills/watchdog-timeout-audit/SKILL.md": ROOT / "skills" / "watchdog-timeout-audit" / "SKILL.md",
     }
 
     for label, path in skill_files.items():
@@ -1238,6 +1258,54 @@ def check_skills() -> list[Finding]:
                 )
             )
 
+    watchdog_formal_skill_label = "skills/watchdog-timeout-audit/SKILL.md"
+    watchdog_formal_skill_content = skill_contents.get(watchdog_formal_skill_label)
+    if watchdog_formal_skill_content is not None:
+        missing_watchdog_formal_skill_refs = _find_missing_semantics(
+            watchdog_formal_skill_content,
+            {
+                "watchdog method truth doc ref": "docs/WATCHDOG_TIMEOUT_AUDIT.md",
+                "watchdog audit pack template ref": "docs/templates/timing-watchdog-audit-pack.md",
+                "watchdog findings template ref": "docs/templates/watchdog-timeout-audit-findings.md",
+            },
+        )
+        if missing_watchdog_formal_skill_refs:
+            findings.append(
+                Finding(
+                    level="L2",
+                    category="skills",
+                    file=watchdog_formal_skill_label,
+                    summary=(
+                        "watchdog-timeout-audit formal skill 缺少必要回指："
+                        f"{', '.join(missing_watchdog_formal_skill_refs)}。"
+                    ),
+                    why_it_matters="若 formal skill 不回指方法真源与模板闭环对象，watchdog 专项能力的 docs/skills/templates 映射将不可审计。",
+                    suggested_action="在 skills/watchdog-timeout-audit/SKILL.md 中补齐对 WATCHDOG_TIMEOUT_AUDIT、timing-watchdog-audit-pack 与 watchdog-timeout-audit-findings 的引用。",
+                )
+            )
+
+        has_not_new_main_scenario_boundary = (
+            "不是新的主场景" in watchdog_formal_skill_content
+            or "不作为新的主场景" in watchdog_formal_skill_content
+        )
+        has_not_new_domain_specialist_boundary = (
+            "不是新的 Domain Specialist" in watchdog_formal_skill_content
+            or "不作为新的 Domain Specialist" in watchdog_formal_skill_content
+            or "不是新的 `Domain Specialist`" in watchdog_formal_skill_content
+            or "不作为新的 `Domain Specialist`" in watchdog_formal_skill_content
+        )
+        if not (has_not_new_main_scenario_boundary and has_not_new_domain_specialist_boundary):
+            findings.append(
+                Finding(
+                    level="L2",
+                    category="skills",
+                    file=watchdog_formal_skill_label,
+                    summary="watchdog-timeout-audit formal skill 缺少边界声明：未同时声明不是新的主场景且不是新的 Domain Specialist。",
+                    why_it_matters="若 formal skill 不声明双边界，watchdog 专项入口会被误解为新增场景或新增 specialist，破坏既有层级。",
+                    suggested_action="在 skills/watchdog-timeout-audit/SKILL.md 中明确声明其不是新的主场景，且不是新的 Domain Specialist。",
+                )
+            )
+
     return findings
 
 
@@ -1295,6 +1363,40 @@ def check_templates() -> list[Finding]:
                 suggested_action="补充 overall result 结论区块。",
             )
         )
+
+    watchdog_findings_label = "docs/templates/watchdog-timeout-audit-findings.md"
+    watchdog_findings_path = ROOT / "docs" / "templates" / "watchdog-timeout-audit-findings.md"
+    watchdog_findings_content = _read_text(watchdog_findings_path)
+    if watchdog_findings_content is None:
+        findings.append(
+            Finding(
+                level="L1",
+                category="templates",
+                file=watchdog_findings_label,
+                summary="watchdog-timeout-audit-findings 模板缺失或无法读取。",
+                why_it_matters="watchdog / timeout 轻量 findings 模板缺失会阻断专项检查结果的统一收口。",
+                suggested_action="恢复 docs/templates/watchdog-timeout-audit-findings.md 并确保 UTF-8 可读。",
+            )
+        )
+    else:
+        missing_watchdog_findings_refs = _find_missing_semantics(
+            watchdog_findings_content,
+            {
+                "watchdog method truth doc ref": "docs/WATCHDOG_TIMEOUT_AUDIT.md",
+                "watchdog formal skill ref": "skills/watchdog-timeout-audit/SKILL.md",
+            },
+        )
+        if missing_watchdog_findings_refs:
+            findings.append(
+                Finding(
+                    level="L2",
+                    category="templates",
+                    file=watchdog_findings_label,
+                    summary=f"watchdog-timeout-audit-findings 缺少必要回指：{', '.join(missing_watchdog_findings_refs)}。",
+                    why_it_matters="若轻量 findings 模板不回指方法真源与 formal skill，watchdog 专项结果就无法与 docs/skills 层形成闭环映射。",
+                    suggested_action="在 docs/templates/watchdog-timeout-audit-findings.md 中补齐对 WATCHDOG_TIMEOUT_AUDIT 与 skills/watchdog-timeout-audit/SKILL.md 的引用。",
+                )
+            )
 
     boundary_label = "docs/templates/skill-boundary-checklist.md"
     boundary_path = ROOT / "docs" / "templates" / "skill-boundary-checklist.md"

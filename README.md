@@ -52,6 +52,8 @@
 - `docs/WATCHDOG_TIMEOUT_AUDIT.md`：`design-safety-review` 下的 watchdog / timeout 专项审计方法真源
 - `docs/REGISTER_STATE_AUDIT.md`：`register-state-auditor` 的寄存器审计方法真源，固定默认值 / 目标值 / 当前值 / 复位后值、位语义与复位返回风险的复核方式
 - `docs/templates/watchdog-timeout-audit-checklist.md`：watchdog / timeout 专项审计检查清单模板（轻量检查导向，承接方法真源）
+- `skills/watchdog-timeout-audit/SKILL.md`：watchdog / timeout 正式专项 skill 入口（非主场景、非 Domain Specialist）
+- `docs/templates/watchdog-timeout-audit-findings.md`：watchdog / timeout 轻量 findings 模板
 - `skills/`：首批正式 skill 文件目录（含 `skills/orchestration/SKILL.md` 总入口、主场景 / 辅助入口 skill，以及 5 个 `Domain Specialist` skill），用于承接路由、场景执行与产物补齐。
 - `docs/ORCHESTRATOR_PROMPT_CONTRACT.md`：un9flow orchestrator 与 scenario prompt 的输入输出与控制信号约束，定义统一**调度协议**。
 - `docs/CONSISTENCY_VALIDATION.md`：docs / skills / templates / cases / 过程文档的统一一致性校验总文档

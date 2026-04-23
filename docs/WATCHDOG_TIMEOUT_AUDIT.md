@@ -22,12 +22,16 @@
 ## 与 specialist / 模板 / 主场景的关系
 - specialist 契约真源：`docs/DOMAIN_SPECIALIST_CONTRACTS.md`
 - 对应 `Domain Specialist`：`timing-watchdog-auditor`
+- 正式专项 skill：`skills/watchdog-timeout-audit/SKILL.md`
 - 对应输出模板：`docs/templates/timing-watchdog-audit-pack.md`
+- 轻量 findings 模板：`docs/templates/watchdog-timeout-audit-findings.md`
 - 主要复用主场景：`docs/DESIGN_SAFETY_REVIEW.md`
 
 职责分工固定为：
 - 本文档回答“审什么、为什么审、失败态是什么”。
-- `docs/templates/timing-watchdog-audit-pack.md` 回答“本次 dispatch 实际产出了什么、证据链是什么、下一步建议是什么”。
+- `docs/templates/watchdog-timeout-audit-checklist.md` 负责逐项审计执行提示。
+- `docs/templates/timing-watchdog-audit-pack.md` 负责完整 specialist 输出。
+- `docs/templates/watchdog-timeout-audit-findings.md` 负责专项问题清单化收口。
 
 ## 关键边界句
 

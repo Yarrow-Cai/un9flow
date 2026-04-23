@@ -77,7 +77,8 @@
 - [x] 寄存器审计能力基线已落地：`docs/REGISTER_STATE_AUDIT.md` 作为方法真源，`docs/templates/register-state-audit-pack.md` 作为 specialist pack 模板
 - [x] ISR / 主循环职责冲突检查已作为 `timing-watchdog-auditor` 线内专项扩展固化，沿 `Domain Specialist` 与 `Artifact` 主线延展
 - [x] 看门狗与超时策略审计专项基线已落地：`docs/WATCHDOG_TIMEOUT_AUDIT.md` 作为方法真源，`docs/templates/watchdog-timeout-audit-checklist.md` 作为 checklist 模板
-- [ ] 看门狗与超时策略正式 skill / findings / CI 集成留待后续阶段扩展
+- [x] 看门狗与超时策略 formal skill / findings 基线已落地：`skills/watchdog-timeout-audit/SKILL.md` 与 `docs/templates/watchdog-timeout-audit-findings.md` 已纳入现有 consistency / CI 门禁
+- [ ] 更重型 watchdog 专项 workflow / 自动报告能力留待后续阶段扩展
 - [ ] 菊花链 / isoSPI / AFE bring-up 模板
 - [ ] Keil Scatter / Linker Script 审核模板
 
