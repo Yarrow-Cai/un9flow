@@ -57,6 +57,7 @@
 - `docs/templates/watchdog-timeout-audit-findings.md`：watchdog / timeout 轻量 findings 模板
 - `docs/templates/watchdog-timeout-audit-report.md`：watchdog / timeout 最终专项报告模板
 - `docs/templates/daisy-chain-isospi-afe-bringup-template.md`：`bringup-path` 下的菊花链 / isoSPI / AFE 首次拉通模板，固定步骤、观测点、基线判据与升级规则
+- `docs/templates/keil-scatter-linker-review-template.md`：`design-safety-review` 下的静态内存布局审查模板，固定 memory region、section 落点、静态约束与升级规则
 - `skills/`：首批正式 skill 文件目录（含 `skills/orchestration/SKILL.md` 总入口、主场景 / 辅助入口 skill，以及 5 个 `Domain Specialist` skill），用于承接路由、场景执行与产物补齐。
 - `docs/ORCHESTRATOR_PROMPT_CONTRACT.md`：un9flow orchestrator 与 scenario prompt 的输入输出与控制信号约束，定义统一**调度协议**。
 - `docs/CONSISTENCY_VALIDATION.md`：docs / skills / templates / cases / 过程文档的统一一致性校验总文档

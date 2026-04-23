@@ -82,7 +82,7 @@
 - [x] watchdog 自动报告生成器基线已落地：`tools/generate_watchdog_timeout_audit_report.py` 已接入现有对象体系并受 consistency / CI 门禁约束
 - [x] 更重型 watchdog 专项 workflow 已落地：docs/WATCHDOG_TIMEOUT_WORKFLOW.md 已把 checklist → pack → findings → report 固定为专项执行骨架
 - [x] 菊花链 / isoSPI / AFE bring-up 模板已落地：docs/templates/daisy-chain-isospi-afe-bringup-template.md 作为 bringup-path 下的专项模板
-- [ ] Keil Scatter / Linker Script 审核模板
+- [x] Keil Scatter / Linker Script 审核模板已落地：docs/templates/keil-scatter-linker-review-template.md 作为 design-safety-review 下的专项模板
 
 ## v6 - 示例与实战
 

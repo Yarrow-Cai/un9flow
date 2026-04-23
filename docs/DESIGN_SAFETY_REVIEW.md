@@ -10,6 +10,7 @@
 - 它继承 `docs/ORCHESTRATOR_PROMPT_CONTRACT.md` 的字段协议与控制信号，不重写总调度协议。
 - 它复用 `docs/DOMAIN_SPECIALIST_CONTRACTS.md` 中已有的 `Domain Specialist` 契约与 `docs/templates/*-pack.md` 输出模板。
 - `docs/WATCHDOG_TIMEOUT_AUDIT.md` 是它在 `failsafe-validation` 段下的专项方法真源。
+- 对于 Keil Scatter / Linker Script 的静态内存布局审查，可优先使用 `docs/templates/keil-scatter-linker-review-template.md` 固定 memory region、section placement、deterministic invariants、evidence inputs 与升级规则。
 
 ## 进入边界与换轨
 
