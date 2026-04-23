@@ -20,6 +20,7 @@
 - 不是所有保护逻辑的大杂烩
 
 ## 与 specialist / 模板 / 主场景的关系
+- 流程真源：`docs/WATCHDOG_TIMEOUT_WORKFLOW.md`
 - specialist 契约真源：`docs/DOMAIN_SPECIALIST_CONTRACTS.md`
 - 对应 `Domain Specialist`：`timing-watchdog-auditor`
 - 正式专项 skill：`skills/watchdog-timeout-audit/SKILL.md`
@@ -32,7 +33,8 @@
 报告生成器说明：`tools/generate_watchdog_timeout_audit_report.py` 以 `watchdog-timeout-audit-findings` 为主输入、以 `timing-watchdog-audit-pack` 为补充输入，生成最终 `watchdog-timeout-audit-report`。
 
 职责分工固定为：
-- 本文档回答“审什么、为什么审、失败态是什么”。
+- `docs/WATCHDOG_TIMEOUT_AUDIT.md` 负责回答“审什么、为什么审、失败态是什么”。
+- `docs/WATCHDOG_TIMEOUT_WORKFLOW.md` 负责回答“怎么跑”。
 - `docs/templates/watchdog-timeout-audit-checklist.md` 负责逐项审计执行提示。
 - `docs/templates/timing-watchdog-audit-pack.md` 负责完整 specialist 输出。
 - `docs/templates/watchdog-timeout-audit-findings.md` 负责专项问题清单化收口。

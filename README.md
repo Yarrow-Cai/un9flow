@@ -50,6 +50,7 @@
 - `docs/DOMAIN_SPECIALIST_CONTRACTS.md`：5 个 `Domain Specialist` 的输入 / 输出契约、禁止项与回交条件真源
 - `docs/SKILL_ARCHITECTURE.md`：总入口、三子入口与辅助 skill 的结构关系与边界基线；作为 skill **入口规范**（`SKILL.md` 前置基线）。
 - `docs/WATCHDOG_TIMEOUT_AUDIT.md`：`design-safety-review` 下的 watchdog / timeout 专项审计方法真源
+- `docs/WATCHDOG_TIMEOUT_WORKFLOW.md`：watchdog / timeout 专项执行流程真源，固定 checklist → pack → findings → report 的顺序与 gate
 - `docs/REGISTER_STATE_AUDIT.md`：`register-state-auditor` 的寄存器审计方法真源，固定默认值 / 目标值 / 当前值 / 复位后值、位语义与复位返回风险的复核方式
 - `docs/templates/watchdog-timeout-audit-checklist.md`：watchdog / timeout 专项审计检查清单模板（轻量检查导向，承接方法真源）
 - `skills/watchdog-timeout-audit/SKILL.md`：watchdog / timeout 正式专项 skill 入口（非主场景、非 Domain Specialist）

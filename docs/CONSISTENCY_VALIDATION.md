@@ -98,6 +98,24 @@
    - 输出为 markdown 报告文件
 11. `docs/WATCHDOG_TIMEOUT_AUDIT.md` 必须补充对 watchdog formal skill、findings 模板、report 模板与报告生成器脚本的回指。
 
+### Watchdog workflow 真源规则
+
+1. `docs/WATCHDOG_TIMEOUT_WORKFLOW.md` 是 watchdog / timeout 的流程真源文档。
+2. `docs/WATCHDOG_TIMEOUT_WORKFLOW.md` 必须回指：
+   - `docs/WATCHDOG_TIMEOUT_AUDIT.md`
+   - `skills/watchdog-timeout-audit/SKILL.md`
+   - `docs/templates/watchdog-timeout-audit-checklist.md`
+   - `docs/templates/timing-watchdog-audit-pack.md`
+   - `docs/templates/watchdog-timeout-audit-findings.md`
+   - `docs/templates/watchdog-timeout-audit-report.md`
+   - `tools/generate_watchdog_timeout_audit_report.py`
+3. `docs/WATCHDOG_TIMEOUT_WORKFLOW.md` 必须显式声明：
+   - 不是新的主场景
+   - 不是新的 `Domain Specialist`
+   - 默认服务 `design-safety-review`
+   - 可被 `incident-investigation` / `bringup-path` 复用
+   - 固定顺序：`checklist → pack → findings → report`
+
 ## 每层校验职责
 
 - **docs：规则完整性**

@@ -373,6 +373,7 @@ def check_docs() -> list[Finding]:
         "docs/ORCHESTRATOR_PROMPT_CONTRACT.md",
         "docs/DOMAIN_SPECIALIST_CONTRACTS.md",
         "docs/CONSISTENCY_VALIDATION.md",
+        "docs/WATCHDOG_TIMEOUT_WORKFLOW.md",
     )
     constrained_docs = (
         "README.md",
@@ -904,6 +905,69 @@ def check_docs() -> list[Finding]:
                     summary="watchdog 专项方法真源缺少 ISR / main loop 职责冲突专项说明。",
                     why_it_matters="若方法真源未显式覆盖 ISR / main loop 职责冲突，isr-mainloop-conflict-note 的归属边界就无法被稳定审计。",
                     suggested_action="在 docs/WATCHDOG_TIMEOUT_AUDIT.md 中补充 ISR / main loop 职责冲突专项说明，并与 timing-watchdog-auditor 的 canonical Artifact 保持一致。",
+                )
+            )
+
+    watchdog_workflow_label = "docs/WATCHDOG_TIMEOUT_WORKFLOW.md"
+    watchdog_workflow_content = docs_content.get(watchdog_workflow_label)
+    if watchdog_workflow_content is not None:
+        missing_watchdog_workflow_refs = _find_missing_semantics(
+            watchdog_workflow_content,
+            {
+                "watchdog method truth doc ref": "docs/WATCHDOG_TIMEOUT_AUDIT.md",
+                "watchdog formal skill ref": "skills/watchdog-timeout-audit/SKILL.md",
+                "watchdog checklist template ref": "docs/templates/watchdog-timeout-audit-checklist.md",
+                "watchdog pack template ref": "docs/templates/timing-watchdog-audit-pack.md",
+                "watchdog findings template ref": "docs/templates/watchdog-timeout-audit-findings.md",
+                "watchdog report template ref": "docs/templates/watchdog-timeout-audit-report.md",
+                "watchdog report generator ref": "tools/generate_watchdog_timeout_audit_report.py",
+            },
+        )
+        if missing_watchdog_workflow_refs:
+            findings.append(
+                Finding(
+                    level="L2",
+                    category="docs",
+                    file=watchdog_workflow_label,
+                    summary=(
+                        "watchdog workflow 真源缺少必要回指："
+                        f"{', '.join(missing_watchdog_workflow_refs)}。"
+                    ),
+                    why_it_matters="若 watchdog workflow 真源不回指专项方法、formal skill、模板与报告生成器，watchdog 流程链路在 docs 层将无法形成闭环映射。",
+                    suggested_action="在 docs/WATCHDOG_TIMEOUT_WORKFLOW.md 中补齐对 WATCHDOG_TIMEOUT_AUDIT、watchdog-timeout-audit formal skill、checklist/pack/findings/report 模板与报告生成脚本的引用。",
+                )
+            )
+
+        missing_watchdog_workflow_semantics = _find_missing_semantics(
+            watchdog_workflow_content,
+            {
+                "not a new main scenario": "不是新的主场景",
+                "not a new Domain Specialist": (
+                    "不是新的 Domain Specialist",
+                    "不是新的 `Domain Specialist`",
+                ),
+                "default design-safety-review service": "design-safety-review",
+                "incident-investigation reuse": "incident-investigation",
+                "bringup-path reuse": "bringup-path",
+                "fixed sequence checklist → pack → findings → report": (
+                    "checklist → pack → findings → report",
+                    "checklist->pack->findings->report",
+                    "checklist -> pack -> findings -> report",
+                ),
+            },
+        )
+        if missing_watchdog_workflow_semantics:
+            findings.append(
+                Finding(
+                    level="L2",
+                    category="docs",
+                    file=watchdog_workflow_label,
+                    summary=(
+                        "watchdog workflow 真源缺少边界/流程语义："
+                        f"{', '.join(missing_watchdog_workflow_semantics)}。"
+                    ),
+                    why_it_matters="若 watchdog workflow 真源缺少主场景边界、specialist 边界、默认服务与固定步骤顺序，watchdog 专项流程会被误解为新增入口或非确定流程。",
+                    suggested_action="在 docs/WATCHDOG_TIMEOUT_WORKFLOW.md 中明确其不是新的主场景、不是新的 Domain Specialist、默认服务 design-safety-review、可被 incident-investigation/bringup-path 复用，并固定顺序 checklist → pack → findings → report。",
                 )
             )
 
