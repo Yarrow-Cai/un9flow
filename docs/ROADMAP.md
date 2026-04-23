@@ -79,7 +79,8 @@
 - [x] 看门狗与超时策略审计专项基线已落地：`docs/WATCHDOG_TIMEOUT_AUDIT.md` 作为方法真源，`docs/templates/watchdog-timeout-audit-checklist.md` 作为 checklist 模板
 - [x] 看门狗与超时策略 formal skill / findings 基线已落地：`skills/watchdog-timeout-audit/SKILL.md` 与 `docs/templates/watchdog-timeout-audit-findings.md` 已纳入现有 consistency / CI 门禁
 - [x] watchdog 自动报告模板基线已落地：`docs/templates/watchdog-timeout-audit-report.md` 已纳入现有 consistency / CI 门禁
-- [ ] 更重型 watchdog 专项 workflow / 真正的自动报告生成器留待后续阶段扩展
+- [x] watchdog 自动报告生成器基线已落地：`tools/generate_watchdog_timeout_audit_report.py` 已接入现有对象体系并受 consistency / CI 门禁约束
+- [ ] 更重型 watchdog 专项 workflow 仍留待后续阶段扩展
 - [ ] 菊花链 / isoSPI / AFE bring-up 模板
 - [ ] Keil Scatter / Linker Script 审核模板
 

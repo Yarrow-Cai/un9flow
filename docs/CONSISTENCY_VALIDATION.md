@@ -64,7 +64,7 @@
    - `- 仍缺的证据:`
 5. `docs/DOMAIN_SPECIALIST_CONTRACTS.md` 必须说明该 Artifact 归属 `timing-watchdog-auditor`，并声明 `不得拆成新的 specialist`。
 
-### Watchdog formal skill / findings / report 归属规则
+### Watchdog formal skill / findings / report / generator 归属规则
 
 1. `skills/watchdog-timeout-audit/SKILL.md` 是 watchdog / timeout 的正式专项 skill 入口，不作为新的主场景，也不作为新的 `Domain Specialist`。
 2. `skills/watchdog-timeout-audit/SKILL.md` 必须回指：
@@ -87,7 +87,16 @@
    - `## risk assessment`
    - `## recommended actions`
    - `## verification gaps`
-8. `docs/WATCHDOG_TIMEOUT_AUDIT.md` 必须补充对 watchdog formal skill、findings 模板与 report 模板的回指。
+8. `tools/generate_watchdog_timeout_audit_report.py` 是 watchdog 自动报告生成器脚本。
+9. `tools/generate_watchdog_timeout_audit_report.py` 必须显式依赖：
+   - `docs/templates/watchdog-timeout-audit-findings.md`
+   - `docs/templates/timing-watchdog-audit-pack.md`
+   - `docs/templates/watchdog-timeout-audit-report.md`
+10. `tools/generate_watchdog_timeout_audit_report.py` 必须体现：
+   - findings 为主输入
+   - pack 为补充输入
+   - 输出为 markdown 报告文件
+11. `docs/WATCHDOG_TIMEOUT_AUDIT.md` 必须补充对 watchdog formal skill、findings 模板、report 模板与报告生成器脚本的回指。
 
 ## 每层校验职责
 

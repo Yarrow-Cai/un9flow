@@ -26,7 +26,10 @@
 - 对应输出模板：`docs/templates/timing-watchdog-audit-pack.md`
 - 轻量 findings 模板：`docs/templates/watchdog-timeout-audit-findings.md`
 - 最终专项报告模板：`docs/templates/watchdog-timeout-audit-report.md`
+- 报告生成器脚本：`tools/generate_watchdog_timeout_audit_report.py`
 - 主要复用主场景：`docs/DESIGN_SAFETY_REVIEW.md`
+
+报告生成器说明：`tools/generate_watchdog_timeout_audit_report.py` 以 `watchdog-timeout-audit-findings` 为主输入、以 `timing-watchdog-audit-pack` 为补充输入，生成最终 `watchdog-timeout-audit-report`。
 
 职责分工固定为：
 - 本文档回答“审什么、为什么审、失败态是什么”。

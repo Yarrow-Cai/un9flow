@@ -883,6 +883,18 @@ def check_docs() -> list[Finding]:
                 )
             )
 
+        if "tools/generate_watchdog_timeout_audit_report.py" not in watchdog_timeout_content:
+            findings.append(
+                Finding(
+                    level="L2",
+                    category="docs",
+                    file=watchdog_timeout_label,
+                    summary="watchdog 专项方法真源缺少自动报告生成器脚本回指。",
+                    why_it_matters="若方法真源不回指 watchdog 报告生成器脚本，watchdog findings/pack 到最终报告输出链路就无法在 docs 层形成闭环映射。",
+                    suggested_action="在 docs/WATCHDOG_TIMEOUT_AUDIT.md 中补充 tools/generate_watchdog_timeout_audit_report.py 的引用。",
+                )
+            )
+
         if "ISR / main loop 职责冲突" not in watchdog_timeout_content:
             findings.append(
                 Finding(
@@ -1454,6 +1466,44 @@ def check_templates() -> list[Finding]:
                     summary=f"watchdog-timeout-audit-report 缺少固定结构段：{', '.join(missing_watchdog_report_sections)}。",
                     why_it_matters="若最终 report 模板缺少固定结构段，专项审计结果就无法保持统一的可审查格式。",
                     suggested_action="在 docs/templates/watchdog-timeout-audit-report.md 中补齐 audit summary、key findings、evidence highlights、risk assessment、recommended actions 与 verification gaps 六个段落。",
+                )
+            )
+
+    watchdog_report_generator_label = "tools/generate_watchdog_timeout_audit_report.py"
+    watchdog_report_generator_path = ROOT / "tools" / "generate_watchdog_timeout_audit_report.py"
+    watchdog_report_generator_content = _read_text(watchdog_report_generator_path)
+    if watchdog_report_generator_content is None:
+        findings.append(
+            Finding(
+                level="L1",
+                category="tools",
+                file=watchdog_report_generator_label,
+                summary="watchdog 自动报告生成器脚本缺失或无法读取。",
+                why_it_matters="缺少自动报告生成器会让 watchdog findings/pack 到最终报告模板的收口链路无法执行。",
+                suggested_action="补充 tools/generate_watchdog_timeout_audit_report.py 并确保 UTF-8 可读。",
+            )
+        )
+    else:
+        missing_watchdog_report_generator_anchors = _find_missing_semantics(
+            watchdog_report_generator_content,
+            {
+                "watchdog findings input anchor": "watchdog-timeout-audit-findings",
+                "watchdog pack input anchor": "timing-watchdog-audit-pack",
+                "watchdog report output anchor": "watchdog-timeout-audit-report",
+            },
+        )
+        if missing_watchdog_report_generator_anchors:
+            findings.append(
+                Finding(
+                    level="L2",
+                    category="tools",
+                    file=watchdog_report_generator_label,
+                    summary=(
+                        "watchdog 自动报告生成器脚本缺少输入/输出锚点："
+                        f"{', '.join(missing_watchdog_report_generator_anchors)}。"
+                    ),
+                    why_it_matters="若脚本未显式体现 findings 主输入、pack 补充输入与 report 输出锚点，生成链路将不可审计。",
+                    suggested_action="在脚本中补齐 watchdog-timeout-audit-findings、timing-watchdog-audit-pack、watchdog-timeout-audit-report 三个锚点。",
                 )
             )
 

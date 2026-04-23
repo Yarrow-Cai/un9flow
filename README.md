@@ -60,6 +60,7 @@
 - `docs/CONSISTENCY_VALIDATION.md`：docs / skills / templates / cases / 过程文档的统一一致性校验总文档
 - `tools/validate_consistency.py`：当前本地一致性校验 CLI
 - `tools/generate_incident_case_bundle.py`：基于现有模板生成 incident workflow 主线文档 bundle 的脚本
+- `tools/generate_watchdog_timeout_audit_report.py`：以 findings 为主输入、pack 为补充输入的 watchdog 自动报告生成器
 - `.github/workflows/consistency-validation.yml`：当前一致性校验 CLI 的 PR / main 门禁 workflow
 - `docs/PLATFORMS.md`：目标平台与后续接入方向
 - `docs/ROADMAP.md`：版本路线图
