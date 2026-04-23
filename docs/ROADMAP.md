@@ -81,7 +81,7 @@
 - [x] watchdog 自动报告模板基线已落地：`docs/templates/watchdog-timeout-audit-report.md` 已纳入现有 consistency / CI 门禁
 - [x] watchdog 自动报告生成器基线已落地：`tools/generate_watchdog_timeout_audit_report.py` 已接入现有对象体系并受 consistency / CI 门禁约束
 - [ ] 更重型 watchdog 专项 workflow 仍留待后续阶段扩展
-- [ ] 菊花链 / isoSPI / AFE bring-up 模板
+- [x] 菊花链 / isoSPI / AFE bring-up 模板已落地：docs/templates/daisy-chain-isospi-afe-bringup-template.md 作为 bringup-path 下的专项模板
 - [ ] Keil Scatter / Linker Script 审核模板
 
 ## v6 - 示例与实战

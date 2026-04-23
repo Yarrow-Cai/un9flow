@@ -66,3 +66,4 @@ description: Drive first-time board, link, or module bring-up by establishing a 
 
 ## Claude Code 宿主附录
 - 新板/新链路/新模块的首次拉通、反复建立动作优先进入本 skill。
+- 对于菊花链 / isoSPI / AFE 的首次拉通，可优先使用 `docs/templates/daisy-chain-isospi-afe-bringup-template.md` 固定 bring-up 步骤、观测点、基线判据与升级规则。
