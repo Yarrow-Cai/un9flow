@@ -868,6 +868,7 @@ def check_docs() -> list[Finding]:
             {
                 "watchdog formal skill ref": "skills/watchdog-timeout-audit/SKILL.md",
                 "watchdog findings template ref": "docs/templates/watchdog-timeout-audit-findings.md",
+                "watchdog report template ref": "docs/templates/watchdog-timeout-audit-report.md",
             },
         )
         if missing_watchdog_formal_refs:
@@ -876,9 +877,9 @@ def check_docs() -> list[Finding]:
                     level="L2",
                     category="docs",
                     file=watchdog_timeout_label,
-                    summary=f"watchdog 专项方法真源缺少 formal skill / findings 回指：{', '.join(missing_watchdog_formal_refs)}。",
-                    why_it_matters="若方法真源不回指 formal skill 与轻量 findings 模板，watchdog 专项入口与结果收口对象将无法形成闭环映射。",
-                    suggested_action="在 docs/WATCHDOG_TIMEOUT_AUDIT.md 中补齐对 skills/watchdog-timeout-audit/SKILL.md 与 docs/templates/watchdog-timeout-audit-findings.md 的引用。",
+                    summary=f"watchdog 专项方法真源缺少 formal skill / findings / report 回指：{', '.join(missing_watchdog_formal_refs)}。",
+                    why_it_matters="若方法真源不回指 formal skill、findings 模板与最终 report 模板，watchdog 专项入口与结果收口对象将无法形成闭环映射。",
+                    suggested_action="在 docs/WATCHDOG_TIMEOUT_AUDIT.md 中补齐对 skills/watchdog-timeout-audit/SKILL.md、docs/templates/watchdog-timeout-audit-findings.md 与 docs/templates/watchdog-timeout-audit-report.md 的引用。",
                 )
             )
 
@@ -1395,6 +1396,64 @@ def check_templates() -> list[Finding]:
                     summary=f"watchdog-timeout-audit-findings 缺少必要回指：{', '.join(missing_watchdog_findings_refs)}。",
                     why_it_matters="若轻量 findings 模板不回指方法真源与 formal skill，watchdog 专项结果就无法与 docs/skills 层形成闭环映射。",
                     suggested_action="在 docs/templates/watchdog-timeout-audit-findings.md 中补齐对 WATCHDOG_TIMEOUT_AUDIT 与 skills/watchdog-timeout-audit/SKILL.md 的引用。",
+                )
+            )
+
+    watchdog_report_label = "docs/templates/watchdog-timeout-audit-report.md"
+    watchdog_report_path = ROOT / "docs" / "templates" / "watchdog-timeout-audit-report.md"
+    watchdog_report_content = _read_text(watchdog_report_path)
+    if watchdog_report_content is None:
+        findings.append(
+            Finding(
+                level="L1",
+                category="templates",
+                file=watchdog_report_label,
+                summary="watchdog-timeout-audit-report 模板缺失或无法读取。",
+                why_it_matters="watchdog / timeout 最终专项报告模板缺失会阻断专项审计结果的正式收口。",
+                suggested_action="恢复 docs/templates/watchdog-timeout-audit-report.md 并确保 UTF-8 可读。",
+            )
+        )
+    else:
+        missing_watchdog_report_refs = _find_missing_semantics(
+            watchdog_report_content,
+            {
+                "watchdog method truth doc ref": "docs/WATCHDOG_TIMEOUT_AUDIT.md",
+                "watchdog findings template ref": "docs/templates/watchdog-timeout-audit-findings.md",
+                "watchdog audit pack template ref": "docs/templates/timing-watchdog-audit-pack.md",
+            },
+        )
+        if missing_watchdog_report_refs:
+            findings.append(
+                Finding(
+                    level="L2",
+                    category="templates",
+                    file=watchdog_report_label,
+                    summary=f"watchdog-timeout-audit-report 缺少必要回指：{', '.join(missing_watchdog_report_refs)}。",
+                    why_it_matters="若最终 report 模板不回指方法真源、findings 模板与 audit pack，专项结论将无法形成可追溯闭环。",
+                    suggested_action="在 docs/templates/watchdog-timeout-audit-report.md 中补齐对 WATCHDOG_TIMEOUT_AUDIT、watchdog-timeout-audit-findings 与 timing-watchdog-audit-pack 的引用。",
+                )
+            )
+
+        missing_watchdog_report_sections = _find_missing_semantics(
+            watchdog_report_content,
+            {
+                "audit summary": "## audit summary",
+                "key findings": "## key findings",
+                "evidence highlights": "## evidence highlights",
+                "risk assessment": "## risk assessment",
+                "recommended actions": "## recommended actions",
+                "verification gaps": "## verification gaps",
+            },
+        )
+        if missing_watchdog_report_sections:
+            findings.append(
+                Finding(
+                    level="L2",
+                    category="templates",
+                    file=watchdog_report_label,
+                    summary=f"watchdog-timeout-audit-report 缺少固定结构段：{', '.join(missing_watchdog_report_sections)}。",
+                    why_it_matters="若最终 report 模板缺少固定结构段，专项审计结果就无法保持统一的可审查格式。",
+                    suggested_action="在 docs/templates/watchdog-timeout-audit-report.md 中补齐 audit summary、key findings、evidence highlights、risk assessment、recommended actions 与 verification gaps 六个段落。",
                 )
             )
 

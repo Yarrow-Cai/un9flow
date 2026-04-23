@@ -25,6 +25,7 @@
 - 正式专项 skill：`skills/watchdog-timeout-audit/SKILL.md`
 - 对应输出模板：`docs/templates/timing-watchdog-audit-pack.md`
 - 轻量 findings 模板：`docs/templates/watchdog-timeout-audit-findings.md`
+- 最终专项报告模板：`docs/templates/watchdog-timeout-audit-report.md`
 - 主要复用主场景：`docs/DESIGN_SAFETY_REVIEW.md`
 
 职责分工固定为：
@@ -32,6 +33,7 @@
 - `docs/templates/watchdog-timeout-audit-checklist.md` 负责逐项审计执行提示。
 - `docs/templates/timing-watchdog-audit-pack.md` 负责完整 specialist 输出。
 - `docs/templates/watchdog-timeout-audit-findings.md` 负责专项问题清单化收口。
+- `docs/templates/watchdog-timeout-audit-report.md` 负责把 findings 与 pack 收束成可交付、可审查、可归档的专项报告。
 
 ## 关键边界句
 
