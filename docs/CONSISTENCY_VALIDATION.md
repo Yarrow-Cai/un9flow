@@ -157,6 +157,15 @@
 - **案例：路由可解释性与回归稳定性**
 - **过程文档：历史一致性**
 
+## Generation regression 定位
+
+1. generation regression 用于校验“给定输入 → 生成输出”是否稳定，确保 docs 真源约束下的生成结果不会无意漂移。
+2. 首批仅覆盖以下生成对象：
+   - `watchdog-timeout-audit-report`
+   - `incident case bundle`
+3. golden files 允许在本地通过显式刷新方式更新，用于开发者确认预期输出已按新规则收敛；CI 中只允许 `check-only` 模式，不允许在门禁中直接刷新 golden files。
+4. generation regression 不替代 consistency validation；前者负责输出稳定性回归，后者负责 docs / skills / templates / cases / 过程文档的一致性校验，两者并列服务 docs 真源。
+
 ## 失败等级
 
 - **L1（阻断级）**：违反主真源规则、破坏层级关系或导致关键规则不可判定。
@@ -175,6 +184,6 @@
 
 ## 当前明确不做
 
-- 自动校验脚本
-- CI 校验器
 - host-specific 校验流程
+- 独立于现有 consistency / generation regression 门禁之外的新校验平台层
+- 自动批准或自动刷新 golden 变更的 CI 流程

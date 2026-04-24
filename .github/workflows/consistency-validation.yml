@@ -46,6 +46,10 @@ jobs:
         if: steps.changes.outputs.has_relevant_changes == 'true'
         run: python tools/validate_consistency.py
 
+      - name: Run generation regression
+        if: steps.changes.outputs.has_relevant_changes == 'true'
+        run: python tools/run_generation_regression.py --check
+
       - name: Skip consistency validation when no relevant changes
         if: steps.changes.outputs.has_relevant_changes != 'true'
         run: echo "No relevant changes, skipping validation."
