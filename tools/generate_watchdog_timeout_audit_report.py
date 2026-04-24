@@ -1,11 +1,24 @@
 from __future__ import annotations
 
+"""
+Generator contract for watchdog-timeout-audit-report.
+
+Truth source: docs/TEMPLATE_GENERATION.md
+Shared core: tools/generation_core.py
+Served object: watchdog-timeout-audit-report / watchdog report
+
+输入 / input:
+- findings: watchdog-timeout-audit-findings
+- pack: timing-watchdog-audit-pack
+
+输出 / output:
+- report: watchdog-timeout-audit-report markdown
+- 输出类型: 单文件 / single file
+"""
+
 import argparse
-from pathlib import Path
 
-
-def read_text_file(path: str | Path) -> str:
-    return Path(path).read_text(encoding="utf-8")
+from generation_core import read_text, write_text
 
 
 def extract_section(text: str, heading: str) -> str:
@@ -51,8 +64,12 @@ def generate_report(findings_text: str, pack_text: str) -> str:
             "# watchdog-timeout-audit-report",
             "",
             "- 方法真源：docs/WATCHDOG_TIMEOUT_AUDIT.md",
+            "- 生成约定真源：docs/TEMPLATE_GENERATION.md",
+            "- 共享生成内核：tools/generation_core.py",
             "- 主输入：watchdog-timeout-audit-findings",
             "- 补充输入：timing-watchdog-audit-pack",
+            "- 输出：watchdog-timeout-audit-report",
+            "- 输出类型：单文件",
             "",
             "## audit summary",
             _fallback(audit_summary),
@@ -105,14 +122,11 @@ def main() -> int:
     parser = build_parser()
     args = parser.parse_args()
 
-    findings_text = read_text_file(args.findings)
-    pack_text = read_text_file(args.pack) if args.pack else ""
+    findings_text = read_text(args.findings)
+    pack_text = read_text(args.pack) if args.pack else ""
 
     report_text = generate_report(findings_text, pack_text)
-
-    output_path = Path(args.output)
-    output_path.parent.mkdir(parents=True, exist_ok=True)
-    output_path.write_text(report_text, encoding="utf-8")
+    write_text(args.output, report_text)
 
     return 0
 

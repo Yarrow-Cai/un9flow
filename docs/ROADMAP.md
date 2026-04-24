@@ -57,6 +57,8 @@
 
 - [x] 模板化能力文档（基于 `Artifact` 模板，见 `docs/templates/*-pack.md`）
 - [x] 文档生成脚本（覆盖 incident workflow 主线，见 `tools/generate_incident_case_bundle.py`）
+- [x] 模板生成体系基线已落地：`docs/TEMPLATE_GENERATION.md` 与 `tools/generation_core.py` 已建立共享约定与最小内核，并已最小接入现有生成器
+- [ ] 更完整的输出回归校验（golden files / snapshot / output regression）留待后续阶段扩展
 - [x] 落地 `docs/CONSISTENCY_VALIDATION.md` 统一校验基线
 - [x] 增加 `consistency-review-checklist.md`
 - [x] 增加 `validation-findings.md`

@@ -10,7 +10,9 @@
   - `docs/INCIDENT_WORKFLOW.md`
   - `docs/SKILL_ARCHITECTURE.md`
   - `docs/ORCHESTRATOR_PROMPT_CONTRACT.md`
+  - `docs/TEMPLATE_GENERATION.md`
   - 说明：`README.md`、`docs/WORKFLOW.md`、`docs/PLATFORMS.md`、`docs/ROADMAP.md` 等属于 docs 层中的入口/派生/辅助说明文档，受 docs 真源层约束，但不单独承担主真源职责。
+  - 说明：模板生成体系不单独拆出新的校验分层；`docs/TEMPLATE_GENERATION.md` 仍属于 docs 真源层，`tools/generation_core.py` 与接入生成脚本属于受该真源约束的实现对象，CLI 只按现有分层口径校验，不新增 `generation_system` 层。
 - **Level 2: 正式 skills 映射层**
   - 以正式 `skills/**/SKILL.md` 为主，校验其是否严格映射 docs 真源规则。
 - **Level 3: 模板层**
@@ -115,6 +117,37 @@
    - 默认服务 `design-safety-review`
    - 可被 `incident-investigation` / `bringup-path` 复用
    - 固定顺序：`checklist → pack → findings → report`
+
+### 模板生成体系真源规则
+
+1. `docs/TEMPLATE_GENERATION.md` 是模板生成体系的约定真源，归属 docs 真源层。
+2. `tools/generation_core.py` 是模板生成体系的共享生成内核，属于受 docs 真源层约束的实现对象。
+3. `docs/TEMPLATE_GENERATION.md` 至少必须明确：
+   - 允许被生成的对象
+   - 输入最小集合
+   - 输出文件命名规则
+   - 生成器输入/输出责任
+   - 缺字段时的处理原则
+   - 单文件 / bundle 输出约定
+4. `tools/generation_core.py` 至少必须包含或体现：
+   - `read_text`
+   - `write_text`
+   - `replace_fields`
+5. 被纳入模板生成体系的脚本必须显式回指：
+   - `docs/TEMPLATE_GENERATION.md`
+   - `tools/generation_core.py`
+   - 自己服务的模板或对象
+6. 首批接入对象至少包括：
+   - `tools/generate_incident_case_bundle.py`
+   - `tools/generate_watchdog_timeout_audit_report.py`
+7. 首批接入对象必须能说明：
+   - 输入是什么
+   - 输出是什么
+   - 输出是单文件还是 bundle
+8. 对 `tools/generate_incident_case_bundle.py` 与 `tools/generate_watchdog_timeout_audit_report.py` 的校验，除对象锚点外，还必须检查：
+   - 是否显式回指 `docs/TEMPLATE_GENERATION.md`
+   - 是否显式回指 `tools/generation_core.py`
+   - 是否显式说明“输入是什么 / 输出是什么 / 输出是单文件还是 bundle"
 
 ## 每层校验职责
 

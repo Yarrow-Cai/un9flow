@@ -55,6 +55,71 @@ CANONICAL_SPECIALIST_SKILL_FILES = {
     "skills/timing-watchdog-auditor/SKILL.md": "timing-watchdog-auditor",
     "skills/failsafe-convergence-reviewer/SKILL.md": "failsafe-convergence-reviewer",
 }
+TEMPLATE_GENERATION_DOC = "docs/TEMPLATE_GENERATION.md"
+GENERATION_CORE_TOOL = "tools/generation_core.py"
+GENERATION_SYSTEM_SCRIPT_SPECS = (
+    {
+        "script": "tools/generate_incident_case_bundle.py",
+        "target_label": "incident case bundle",
+        "target_object_anchors": (
+            "incident case bundle",
+            "incident-case-bundle",
+            "incident_case_bundle",
+            "generated-incident-case-bundle",
+        ),
+        "input_output_semantics": {
+            "docs truth ref": TEMPLATE_GENERATION_DOC,
+            "shared core ref": GENERATION_CORE_TOOL,
+            "input anchor": (
+                "输入",
+                "input",
+                "case_id",
+                "scenario",
+            ),
+            "output anchor": (
+                "输出",
+                "output",
+                "generated bundle",
+                "bundle root",
+            ),
+            "single-file-or-bundle anchor": (
+                "bundle",
+                "单文件",
+                "single file",
+            ),
+        },
+    },
+    {
+        "script": "tools/generate_watchdog_timeout_audit_report.py",
+        "target_label": "watchdog report",
+        "target_object_anchors": (
+            "watchdog report",
+            "watchdog-timeout-audit-report",
+            "watchdog_timeout_audit_report",
+        ),
+        "input_output_semantics": {
+            "docs truth ref": TEMPLATE_GENERATION_DOC,
+            "shared core ref": GENERATION_CORE_TOOL,
+            "input anchor": (
+                "输入",
+                "input",
+                "findings",
+                "pack",
+            ),
+            "output anchor": (
+                "输出",
+                "output",
+                "report",
+                "markdown",
+            ),
+            "single-file-or-bundle anchor": (
+                "单文件",
+                "single file",
+                "bundle",
+            ),
+        },
+    },
+)
 
 
 def _read_text(path: Path) -> str | None:
@@ -132,6 +197,11 @@ def _find_missing_semantics(
         if not any(candidate in text for candidate in candidate_values):
             missing.append(semantic)
     return missing
+
+
+def _has_any_anchor(text: str, candidates: str | tuple[str, ...]) -> bool:
+    candidate_values = (candidates,) if isinstance(candidates, str) else candidates
+    return any(candidate in text for candidate in candidate_values)
 
 
 def is_incident_orchestrator_scoped(text: str) -> bool:
@@ -559,6 +629,75 @@ def check_docs() -> list[Finding]:
                     summary="docs 真源层缺少 DOMAIN_SPECIALIST_CONTRACTS 锚点。",
                     why_it_matters="若一致性校验基线不把 specialist 契约真源纳入 docs 层，specialist 输入输出规则就会游离在校验范围之外。",
                     suggested_action="在 docs/CONSISTENCY_VALIDATION.md 中把 docs/DOMAIN_SPECIALIST_CONTRACTS.md 纳入 docs 真源层。",
+                )
+            )
+
+        missing_generation_validation_semantics = _find_missing_semantics(
+            consistency_validation_content,
+            {
+                "template generation stays in docs truth layer": "docs/TEMPLATE_GENERATION.md",
+                "generation core implementation anchor": "tools/generation_core.py",
+                "no standalone generation_system layer": "generation_system",
+                "allowed generated objects": "允许被生成的对象",
+                "minimal input set": "输入最小集合",
+                "output naming rules": "输出文件命名规则",
+                "generator input/output responsibility": "生成器输入/输出责任",
+                "missing field handling": "缺字段时的处理原则",
+                "single file / bundle convention": "单文件 / bundle 输出约定",
+            },
+        )
+        if missing_generation_validation_semantics:
+            findings.append(
+                Finding(
+                    level="L2",
+                    category="docs",
+                    file=consistency_validation_label,
+                    summary=(
+                        "一致性规范缺少模板生成体系校验锚点："
+                        f"{', '.join(missing_generation_validation_semantics)}。"
+                    ),
+                    why_it_matters="若一致性规范本身未声明模板生成体系归属、最小语义要求与实现对象约束，CLI 就无法与文档分层口径保持一致。",
+                    suggested_action="在 docs/CONSISTENCY_VALIDATION.md 中补齐模板生成体系仍归 docs 真源层、generation_core 为受约束实现对象，以及最小语义校验项。",
+                )
+            )
+
+    template_generation_label = TEMPLATE_GENERATION_DOC
+    template_generation_content = _read_text(ROOT / template_generation_label)
+    if template_generation_content is None:
+        findings.append(
+            Finding(
+                level="L1",
+                category="docs",
+                file=template_generation_label,
+                summary="模板生成体系真源文档缺失或无法读取。",
+                why_it_matters="若 docs/TEMPLATE_GENERATION.md 不可读，模板生成体系将失去 docs 层唯一约定真源。",
+                suggested_action="补充 docs/TEMPLATE_GENERATION.md 并确保 UTF-8 可读。",
+            )
+        )
+    else:
+        missing_template_generation_semantics = _find_missing_semantics(
+            template_generation_content,
+            {
+                "allowed generated objects": "允许被生成的对象",
+                "minimal input set": "输入最小集合",
+                "output naming rules": "输出文件命名规则",
+                "generator input/output responsibility": "生成器输入/输出责任",
+                "missing field handling": "缺字段时的处理原则",
+                "single file / bundle convention": "单文件 / bundle 输出约定",
+            },
+        )
+        if missing_template_generation_semantics:
+            findings.append(
+                Finding(
+                    level="L2",
+                    category="docs",
+                    file=template_generation_label,
+                    summary=(
+                        "模板生成体系真源文档缺少最小语义锚点："
+                        f"{', '.join(missing_template_generation_semantics)}。"
+                    ),
+                    why_it_matters="若 docs 真源只存在文件而不承载生成对象、输入输出与缺字段处理规则，下一轮生成体系失败将无法给出精确指引。",
+                    suggested_action="在 docs/TEMPLATE_GENERATION.md 中补齐允许对象、输入最小集合、输出命名规则、生成器输入/输出责任、缺字段处理原则与单文件 / bundle 输出约定。",
                 )
             )
 
@@ -2059,6 +2198,114 @@ def check_routing_cases() -> list[Finding]:
     return findings
 
 
+def check_generation_tools() -> list[Finding]:
+    findings: list[Finding] = []
+
+    generation_core_path = ROOT / GENERATION_CORE_TOOL
+    generation_core_content = _read_text(generation_core_path)
+    if generation_core_content is None:
+        findings.append(
+            Finding(
+                level="L1",
+                category="tools",
+                file=GENERATION_CORE_TOOL,
+                summary="模板生成体系共享生成内核缺失或无法读取。",
+                why_it_matters="若 tools/generation_core.py 不可读，受 docs 真源层约束的生成脚本将无法共享统一生成内核。",
+                suggested_action="补充 tools/generation_core.py 并确保 UTF-8 可读。",
+            )
+        )
+    else:
+        missing_generation_core_semantics = _find_missing_semantics(
+            generation_core_content,
+            {
+                "read_text": "read_text",
+                "write_text": "write_text",
+                "replace_fields": "replace_fields",
+            },
+        )
+        if missing_generation_core_semantics:
+            findings.append(
+                Finding(
+                    level="L2",
+                    category="tools",
+                    file=GENERATION_CORE_TOOL,
+                    summary=(
+                        "模板生成体系共享生成内核缺少最小语义锚点："
+                        f"{', '.join(missing_generation_core_semantics)}。"
+                    ),
+                    why_it_matters="若 generation core 只存在文件而不体现最小读写与字段替换职责，CLI 将无法给出共享内核级别的精确失败指引。",
+                    suggested_action="在 tools/generation_core.py 中补齐或显式体现 read_text、write_text、replace_fields。",
+                )
+            )
+
+    for spec in GENERATION_SYSTEM_SCRIPT_SPECS:
+        script_label = spec["script"]
+        target_object_label = spec["target_label"]
+        target_object_anchors = spec["target_object_anchors"]
+        input_output_semantics = spec["input_output_semantics"]
+
+        script_content = _read_text(ROOT / script_label)
+        if script_content is None:
+            findings.append(
+                Finding(
+                    level="L1",
+                    category="tools",
+                    file=script_label,
+                    summary="模板生成体系脚本缺失或无法读取。",
+                    why_it_matters="首批接入生成脚本不可读时，模板生成体系无法对该对象做一致性判定。",
+                    suggested_action=f"恢复 {script_label} 并确保 UTF-8 可读。",
+                )
+            )
+            continue
+
+        missing_explicit_refs: list[str] = []
+        if TEMPLATE_GENERATION_DOC not in script_content:
+            missing_explicit_refs.append(TEMPLATE_GENERATION_DOC)
+        if GENERATION_CORE_TOOL not in script_content:
+            missing_explicit_refs.append(GENERATION_CORE_TOOL)
+        if not _has_any_anchor(script_content, target_object_anchors):
+            missing_explicit_refs.append(target_object_label)
+        if missing_explicit_refs:
+            findings.append(
+                Finding(
+                    level="L2",
+                    category="tools",
+                    file=script_label,
+                    summary=f"模板生成体系脚本缺少显式路径/对象锚点：{', '.join(missing_explicit_refs)}。",
+                    why_it_matters="若首批接入脚本不显式回指 docs 真源、共享内核与自身服务对象，生成链路就无法形成可审计闭环。",
+                    suggested_action=(
+                        f"在 {script_label} 中显式补齐 {TEMPLATE_GENERATION_DOC}、"
+                        f"{GENERATION_CORE_TOOL} 与自身服务对象的锚点说明。"
+                    ),
+                )
+            )
+
+        missing_io_semantics = [
+            semantic
+            for semantic, candidates in input_output_semantics.items()
+            if not _has_any_anchor(script_content, candidates)
+        ]
+        if missing_io_semantics:
+            findings.append(
+                Finding(
+                    level="L2",
+                    category="tools",
+                    file=script_label,
+                    summary=(
+                        "模板生成体系脚本缺少输入/输出约束锚点："
+                        f"{', '.join(missing_io_semantics)}。"
+                    ),
+                    why_it_matters="规则文案要求首批接入对象说明输入、输出以及单文件/bundle 形态；若脚本缺少这些锚点，下一轮失败将无法直接指向缺失说明。",
+                    suggested_action=(
+                        f"在 {script_label} 中显式说明输入是什么、输出是什么、输出是单文件还是 bundle，"
+                        f"并补齐对 {TEMPLATE_GENERATION_DOC} 与 {GENERATION_CORE_TOOL} 的路径回指。"
+                    ),
+                )
+            )
+
+    return findings
+
+
 def check_process_docs() -> list[Finding]:
     findings: list[Finding] = []
     scan_roots = (
@@ -2130,6 +2377,7 @@ VALIDATION_CHECKS = (
     ("docs", check_docs),
     ("skills", check_skills),
     ("templates", check_templates),
+    ("tools", check_generation_tools),
     ("routing_cases", check_routing_cases),
     ("process_docs", check_process_docs),
 )
