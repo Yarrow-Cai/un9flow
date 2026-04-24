@@ -4,7 +4,7 @@
 
 **Goal:** 为 un9flow 增加一份 incident 语义的故障注入报告示例，展示注入目标、观察行为、evidence 收口、watchdog findings / report 收口以及结论边界。
 
-**Architecture:** 本轮不构建实验数据库或自动化故障注入平台，而是新增一个主案例文档 `docs/cases/fault-injection-report-example.md`，用正文串起“注入 → 观察 → incident 解释 → watchdog 专项收口 → 结论边界”。当前 `.github/workflows/consistency-validation.yml` 不改结构，且本轮默认不为该示例增加新的专门校验器；目标是先让 v6 第三份示例具备可阅读、可展示、可归档的最低完整度。
+**Architecture:** 本轮不构建实验数据库或自动化故障注入平台，而是新增一个主案例文档 `docs/cases/fault-injection-report-example.md`，用正文串起“注入 → 观察 → incident 解释 → watchdog 专项收口 → 结论边界”。当前 `.github/workflows/consistency-validation.yml` 不改结构，且本轮默认不为该示例增加新的专门校验器；目标是先让 v6 下一份示例具备可阅读、可展示、可归档的最低完整度。
 
 **Tech Stack:** Markdown, git, Claude Code
 
@@ -75,6 +75,11 @@ Expected: 无输出
 - 注入范围:
 - 当前约束与安全边界:
 - 停止条件:
+- 最小复现实验骨架:
+  - 注入执行入口:
+  - 时间基准对齐:
+  - 观察窗口:
+  - 恢复 / 未恢复 / 需要升级的判定门槛:
 
 ## observed behavior
 - timeout:
@@ -139,7 +144,7 @@ Expected: 6 个主段全部命中
 - [ ] **Step 2: 运行最小文本检查**
 
 Run: `grep -n "fault-injection-report-example" README.md docs/cases/fault-injection-report-example.md`
-Expected: README 与案例文档均命中该文件名
+Expected: README 命中，案例文件存在并可读取；若案例文档正文顺带命中该文件名也可接受，但不作为必须条件。
 
 ---
 
@@ -164,7 +169,7 @@ Expected: README 与案例文档均命中该文件名
 - [ ] **Step 2: 运行最小文本检查，确认案例已被入口文档与路线图引用**
 
 Run: `grep -n "fault-injection-report-example" README.md docs/ROADMAP.md docs/cases/fault-injection-report-example.md`
-Expected: 3 个文件都命中该案例文件名
+Expected: README 与 ROADMAP 命中；案例文件存在并可读取。若案例文档正文顺带命中该文件名也可接受，但不作为必须条件。
 
 - [ ] **Step 3: 提交故障注入报告示例基线**
 
