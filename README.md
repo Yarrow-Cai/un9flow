@@ -71,6 +71,7 @@
 - `docs/cases/bms-daisy-chain-afe-end-to-end-example.md`：v6 第一份端到端 BMS 方法链示例，串起 bring-up → incident → watchdog → design-safety-review
 - `docs/cases/power-board-bringup-example.md`：v6 第二份功率板 bring-up 流程示例，展示安全基线、控制建立与升级判断
 - `docs/cases/fault-injection-report-example.md`：incident 语义的故障注入报告示例，展示注入、观察、findings / report 收口与结论边界
+- `docs/cases/limp-home-design-example.md`：`design-safety-review` 语义下的 limp-home 设计说明示例，展示进入条件、保留能力、禁止能力、风险边界与退出条件
 - `docs/templates/`：incident / orchestrator / consistency / specialist 输出模板（incident summary、evidence package、diagnosis pack、review memo；orchestrator-routing-matrix、orchestrator-dispatch-plan、prompt-contract-checklist、skill-boundary-checklist、skill-routing-matrix、consistency-review-checklist、validation-findings，以及 5 个 `*-pack.md` specialist 输出模板）
 - `AGENTS.md`：仓库内协作约束
 

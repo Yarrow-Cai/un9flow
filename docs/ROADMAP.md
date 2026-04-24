@@ -93,7 +93,7 @@
 - [x] 示例 BMS 方法论用法已落地：`docs/cases/bms-daisy-chain-afe-end-to-end-example.md` 作为 v6 第一份端到端示例
 - [x] 示例功率板 bring-up 流程已落地：`docs/cases/power-board-bringup-example.md` 作为 v6 第二份端到端示例
 - [x] 示例故障注入报告已落地：`docs/cases/fault-injection-report-example.md` 作为 incident 语义的报告型示例
-- [ ] 示例 limp-home 设计说明
+- [x] 示例 limp-home 设计说明已落地：`docs/cases/limp-home-design-example.md` 作为 design-safety-review 语义的设计说明示例
 
 ## 长期目标
 
