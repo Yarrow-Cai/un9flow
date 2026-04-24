@@ -91,7 +91,7 @@
 计划方向：
 
 - [x] 示例 BMS 方法论用法已落地：`docs/cases/bms-daisy-chain-afe-end-to-end-example.md` 作为 v6 第一份端到端示例
-- [ ] 示例功率板 bring-up 流程
+- [x] 示例功率板 bring-up 流程已落地：`docs/cases/power-board-bringup-example.md` 作为 v6 第二份端到端示例
 - [ ] 示例故障注入报告
 - [ ] 示例 limp-home 设计说明
 
