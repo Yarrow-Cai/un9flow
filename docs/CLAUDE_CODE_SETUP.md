@@ -69,11 +69,17 @@ python tools/validate_consistency.py
 # 验证生成回归
 python tools/run_generation_regression.py --check
 
+# 先盘点当前状态（inspect）
+python tools/sync_claude_code_skills.py --target-root <path> --inspect
+
 # 验证 skill 同步计划（dry-run）
 python tools/sync_claude_code_skills.py --target-root <path> --dry-run
 ```
 
-上述命令均应返回成功（exit code 0），无报错信息。`--dry-run` 可输出稳定同步计划，且仅覆盖 `skills/**/SKILL.md`。
+上述命令均应返回成功（exit code 0），无报错信息。
+
+- `--inspect`：先看当前状态。用于在执行同步前盘点 skill 来源、目标路径与当前目标状态，属于"先盘点再执行"的辅助动作。
+- `--dry-run`：预演将执行的 copy 动作。输出稳定同步计划，且仅覆盖 `skills/**/SKILL.md`。
 
 ## 当前明确不做
 

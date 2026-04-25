@@ -137,6 +137,16 @@
 - [x] 目标目录结构已固定为来源相对路径镜像
 - [x] `dry-run` / `force` / `summary` 最小行为已被显式固定
 
+## v11 - Claude Code skills sync inspect 增强
+
+目标：让 skills-only 同步脚本在真正执行前能静态盘点当前状态。
+
+计划方向：
+
+- [x] `--inspect` 模式已落地
+- [x] inspect / dry-run / sync 三段能力已被显式分离
+- [x] inspect 输出结构已固定为头部摘要 / 逐项清单 / 尾部 summary
+
 ## 长期目标
 
 把 `un9flow` 做成：

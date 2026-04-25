@@ -197,10 +197,13 @@
 2. `tools/sync_claude_code_skills.py` 不得同步 `docs/**`、`docs/templates/**`、`docs/cases/**`、`docs/golden-outputs/**`、`docs/golden-inputs/**`、`regression` 相关文件或其他非 `SKILL.md` 对象。
 3. `tools/sync_claude_code_skills.py` 必须支持以下最小参数：
    - `--target-root`
+   - `--inspect`
    - `--dry-run`
    - `--force`
-4. 目标路径必须按来源相对路径稳定镜像；同一来源 `skills/**/SKILL.md` 在同一 `--target-root` 下必须得到稳定且可预测的目标路径。
-5. `--dry-run` 必须输出稳定同步计划，`--force` 必须覆盖已存在目标文件，且脚本必须显式输出最小 summary 行为，便于 host 侧验证同步结果。
+4. `tools/sync_claude_code_skills.py --inspect` 只允许执行静态盘点，不得写文件、不得创建目录、不得执行复制等实际同步动作。
+5. `--inspect` 必须与 `--dry-run`、`--force` 互斥，不允许组合使用。
+6. 目标路径必须按来源相对路径稳定镜像；同一来源 `skills/**/SKILL.md` 在同一 `--target-root` 下必须得到稳定且可预测的目标路径。
+7. `--dry-run` 必须输出稳定同步计划，`--force` 必须覆盖已存在目标文件，且脚本必须显式输出最小 summary 行为，便于 host 侧验证同步结果。
 
 ## 每层校验职责
 

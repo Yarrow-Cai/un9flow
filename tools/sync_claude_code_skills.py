@@ -36,6 +36,11 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Overwrite existing target files instead of skipping them.",
     )
+    parser.add_argument(
+        "--inspect",
+        action="store_true",
+        help="Print a static inventory of source and target skill files without writing files.",
+    )
     return parser
 
 
@@ -51,6 +56,47 @@ def target_path_for(skill_file: Path, target_root: Path) -> Path:
     return target_root / skill_file.relative_to(ROOT)
 
 
+def inspect_skill_files(skill_files: list[Path], target_root: Path) -> int:
+    if not skill_files:
+        print("No skill files found.", file=sys.stderr)
+        return 2
+
+    existing = 0
+    missing = 0
+
+    print("INSPECT")
+    print(f"SOURCE ROOT: {display_path(SKILLS_ROOT.relative_to(ROOT))}")
+    print(f"TARGET ROOT: {display_path(target_root)}")
+    print(f"FOUND {len(skill_files)} skills")
+
+    for skill_file in skill_files:
+        destination = target_path_for(skill_file, target_root)
+        source_label = display_path(skill_file.relative_to(ROOT))
+        target_label = display_path(destination)
+        status = "existing" if destination.exists() else "missing"
+        if status == "existing":
+            existing += 1
+        else:
+            missing += 1
+        print(f"- source: {source_label}")
+        print(f"  target: {target_label}")
+        print(f"  status: {status}")
+
+    print("SUMMARY")
+    print(f"- total: {len(skill_files)}")
+    print(f"- existing: {existing}")
+    print(f"- missing: {missing}")
+    return 0
+
+
+def classify_sync_action(destination: Path, force: bool) -> str:
+    if not destination.exists():
+        return "copy"
+    if force:
+        return "overwrite"
+    return "skip"
+
+
 def sync_skill_files(
     skill_files: list[Path],
     target_root: Path,
@@ -62,12 +108,34 @@ def sync_skill_files(
         return 2
 
     if dry_run:
+        planned_copy = 0
+        planned_skip = 0
+        planned_overwrite = 0
+
         print("DRY-RUN")
         print(f"FOUND {len(skill_files)} skills")
         for skill_file in skill_files:
+            destination = target_path_for(skill_file, target_root)
             source_label = display_path(skill_file.relative_to(ROOT))
-            target_label = display_path(target_path_for(skill_file, target_root))
-            print(f"PLAN COPY {source_label} -> {target_label}")
+            target_label = display_path(destination)
+            action = classify_sync_action(destination, force)
+
+            if action == "copy":
+                print(f"PLAN COPY {source_label} -> {target_label}")
+                planned_copy += 1
+            elif action == "overwrite":
+                print(f"PLAN OVERWRITE {source_label} -> {target_label}")
+                planned_overwrite += 1
+            else:
+                print(f"PLAN SKIP {source_label} -> {target_label}")
+                planned_skip += 1
+
+        print(
+            "SUMMARY: "
+            f"planned_copy {planned_copy}, "
+            f"planned_skip {planned_skip}, "
+            f"planned_overwrite {planned_overwrite}"
+        )
         return 0
 
     synced = 0
@@ -78,8 +146,9 @@ def sync_skill_files(
         destination = target_path_for(skill_file, target_root)
         source_label = display_path(skill_file.relative_to(ROOT))
         target_label = display_path(destination)
+        action = classify_sync_action(destination, force)
 
-        if destination.exists() and not force:
+        if action == "skip":
             print(f"SKIPPED {source_label} -> {target_label}", file=sys.stderr)
             skipped += 1
             continue
@@ -105,8 +174,20 @@ def sync_skill_files(
 def main(argv: list[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
+
+    if args.inspect and args.dry_run:
+        print("Cannot combine --inspect and --dry-run.", file=sys.stderr)
+        return 2
+    if args.inspect and args.force:
+        print("Cannot combine --inspect and --force.", file=sys.stderr)
+        return 2
+
     target_root = Path(args.target_root)
     skill_files = discover_skill_files()
+
+    if args.inspect:
+        return inspect_skill_files(skill_files=skill_files, target_root=target_root)
+
     return sync_skill_files(
         skill_files=skill_files,
         target_root=target_root,
