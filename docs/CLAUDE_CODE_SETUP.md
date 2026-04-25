@@ -24,6 +24,7 @@
 5. **总调度文档**：`docs/ORCHESTRATION.md` — 定义总调度外壳规则。
 6. **一致性验证工具**：`tools/validate_consistency.py` — 用于验证文档和代码之间的一致性。
 7. **生成回归检查工具**：`tools/run_generation_regression.py --check` — 用于检查生成输出是否与预期一致。
+8. **Skill 同步脚本**：`tools/sync_claude_code_skills.py` — 用于把正式 `skills/**/SKILL.md` 入口同步到 Claude Code 消费目录骨架。
 
 ### 可选关心的对象
 
@@ -67,9 +68,12 @@ python tools/validate_consistency.py
 
 # 验证生成回归
 python tools/run_generation_regression.py --check
+
+# 验证 skill 同步计划（dry-run）
+python tools/sync_claude_code_skills.py --target-root <path> --dry-run
 ```
 
-两条命令均应返回成功（exit code 0），无报错信息。
+上述命令均应返回成功（exit code 0），无报错信息。`--dry-run` 可输出稳定同步计划，且仅覆盖 `skills/**/SKILL.md`。
 
 ## 当前明确不做
 

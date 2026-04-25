@@ -28,8 +28,11 @@ Claude Code 是当前 `un9flow` 的**第一优先级 host**，原因如下：
 ### 直接消费层
 
 - `skills/**/SKILL.md`
+- `tools/sync_claude_code_skills.py`
 
 这是 Claude Code 的正式直接消费入口层。当前宿主真正直接消费的能力对象，以正式 `skills/**/SKILL.md` 为准。
+
+其中，第一批可执行落点是 `tools/sync_claude_code_skills.py`：它负责把正式 `skills/**/SKILL.md` 同步到目标 Claude Code 消费目录骨架，作为 host 侧第一条最小可执行接入动作。
 
 ### 真源支撑层
 

@@ -191,6 +191,17 @@
    - setup 后验证
    - 当前明确不做
 
+### Claude Code skills-only 同步脚本边界规则
+
+1. `tools/sync_claude_code_skills.py` 只允许处理正式 `skills/**/SKILL.md`。
+2. `tools/sync_claude_code_skills.py` 不得同步 `docs/**`、`docs/templates/**`、`docs/cases/**`、`docs/golden-outputs/**`、`docs/golden-inputs/**`、`regression` 相关文件或其他非 `SKILL.md` 对象。
+3. `tools/sync_claude_code_skills.py` 必须支持以下最小参数：
+   - `--target-root`
+   - `--dry-run`
+   - `--force`
+4. 目标路径必须按来源相对路径稳定镜像；同一来源 `skills/**/SKILL.md` 在同一 `--target-root` 下必须得到稳定且可预测的目标路径。
+5. `--dry-run` 必须输出稳定同步计划，`--force` 必须覆盖已存在目标文件，且脚本必须显式输出最小 summary 行为，便于 host 侧验证同步结果。
+
 ## 每层校验职责
 
 - **docs：规则完整性**

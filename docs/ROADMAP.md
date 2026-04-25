@@ -127,6 +127,16 @@
 - [x] setup 前提、最小 setup 对象、最小 setup 步骤、setup 后验证与当前明确不做已被显式固定
 - [x] 最小 setup 步骤与 setup 后验证标准已被显式固定
 
+## v10 - Claude Code skills-only 同步骨架
+
+目标：把正式 `skills/**/SKILL.md` 入口同步到 Claude Code 消费目录骨架，形成第一条最小可执行 host 接入动作。
+
+计划方向：
+
+- [x] `tools/sync_claude_code_skills.py` 已落地为最小同步脚本
+- [x] 目标目录结构已固定为来源相对路径镜像
+- [x] `dry-run` / `force` / `summary` 最小行为已被显式固定
+
 ## 长期目标
 
 把 `un9flow` 做成：
