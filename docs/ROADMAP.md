@@ -97,6 +97,16 @@
 - [x] 示例故障注入报告已落地：`docs/cases/fault-injection-report-example.md` 作为 incident 语义的报告型示例
 - [x] 示例 limp-home 设计说明已落地：`docs/cases/limp-home-design-example.md` 作为 design-safety-review 语义的设计说明示例
 
+## v7 - bringup-path 场景真源化
+
+目标：把 bringup-path 从总调度中的预留场景升级为正式场景真源。
+
+计划方向：
+
+- [x] `docs/BRINGUP_PATH.md` 已落地为正式场景真源
+- [x] `isoSPI / AFE bring-up` 已固定为首个 canonical 子焦点
+- [x] bringup-path skill 已收紧为映射层，不再单独承担场景真源职责
+
 ## 长期目标
 
 把 `un9flow` 做成：

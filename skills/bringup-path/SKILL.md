@@ -5,6 +5,9 @@ description: Drive first-time board, link, or module bring-up by establishing a 
 
 # bringup-path
 
+## 场景真源
+- 场景真源：`docs/BRINGUP_PATH.md`
+
 ## 目标
 - 面向新板 / 新链路 / 新模块的首次拉通与重复建立过程，先建立确定性基线，再验证链路拉通。
 
@@ -32,22 +35,13 @@ description: Drive first-time board, link, or module bring-up by establishing a 
 - 当前约束与风险边界
 
 ## 默认 Phase 骨架
-1. `hazard-analysis`
-2. `deterministic-foundation`
-3. `link-diagnostics`
-4. `failsafe-validation`
+- 默认执行骨架遵循 `docs/BRINGUP_PATH.md`。
 
-## 默认 specialist 偏向
-- `register-state-auditor`
-- `state-machine-tracer`
-- `timing-watchdog-auditor`
-- `signal-path-tracer`
-- `failsafe-convergence-reviewer`
+## 默认 specialist 装配
+- 默认 specialist 装配遵循 `docs/BRINGUP_PATH.md`。
 
 ## 主要 Artifact
-- `bringup-baseline`
-- `link-qualification-log`
-- `initial-diagnosis-conclusion`
+- 主收口 Artifact 遵循 `docs/BRINGUP_PATH.md`。
 
 ## 场景特化段
 ### 建立基线优先说明
@@ -66,4 +60,4 @@ description: Drive first-time board, link, or module bring-up by establishing a 
 
 ## Claude Code 宿主附录
 - 新板/新链路/新模块的首次拉通、反复建立动作优先进入本 skill。
-- 对于菊花链 / isoSPI / AFE 的首次拉通，可优先使用 `docs/templates/daisy-chain-isospi-afe-bringup-template.md` 固定 bring-up 步骤、观测点、基线判据与升级规则。
+- 对于 `isoSPI / AFE bring-up`，优先使用 `docs/templates/daisy-chain-isospi-afe-bringup-template.md` 作为 `docs/BRINGUP_PATH.md` 下的专项模板。该模板固定 bring-up 步骤、观测点、基线判据与升级规则。

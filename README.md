@@ -46,6 +46,7 @@
 - `docs/WORKFLOW.md`：方法论工作流
 - `docs/INCIDENT_WORKFLOW.md`：incident-first 故障排查工作流基线
 - `docs/DESIGN_SAFETY_REVIEW.md`：design-safety-review 主场景真源，固定功能安全复核的 phase / specialist / artifact 对齐关系
+- `docs/BRINGUP_PATH.md`：`bringup-path` 的正式场景真源，定义 bring-up 进入边界、phase backbone、specialist 装配与 completion gate
 - `docs/ORCHESTRATION.md`：三场景并列的 orchestrator 总调度规则；负责总调度规则，`docs/INCIDENT_WORKFLOW.md` 负责 incident 场景专属闭环。
 - `docs/DOMAIN_SPECIALIST_CONTRACTS.md`：5 个 `Domain Specialist` 的输入 / 输出契约、禁止项与回交条件真源
 - `docs/SKILL_ARCHITECTURE.md`：总入口、三子入口与辅助 skill 的结构关系与边界基线；作为 skill **入口规范**（`SKILL.md` 前置基线）。

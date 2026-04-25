@@ -118,6 +118,17 @@
    - 可被 `incident-investigation` / `bringup-path` 复用
    - 固定顺序：`checklist → pack → findings → report`
 
+### bringup-path 场景真源规则
+
+1. `docs/BRINGUP_PATH.md` 是 `bringup-path` 的正式场景真源文档。
+2. `docs/BRINGUP_PATH.md` 必须回指：
+   - `docs/ORCHESTRATION.md`
+   - `docs/DOMAIN_SPECIALIST_CONTRACTS.md`
+   - `docs/templates/daisy-chain-isospi-afe-bringup-template.md`
+   - `docs/cases/power-board-bringup-example.md`
+3. `skills/bringup-path/SKILL.md` 必须回指 `docs/BRINGUP_PATH.md`。
+4. `docs/templates/daisy-chain-isospi-afe-bringup-template.md` 与 `docs/cases/power-board-bringup-example.md` 只能作为模板 / 示例承接 bring-up 规则，不得反向承担 `bringup-path` 的场景真源职责。
+
 ### 模板生成体系真源规则
 
 1. `docs/TEMPLATE_GENERATION.md` 是模板生成体系的约定真源，归属 docs 真源层。

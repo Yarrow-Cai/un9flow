@@ -93,12 +93,8 @@
     - `deterministic-foundation`：`register-state-auditor`、`signal-path-tracer`
     - `failsafe-validation`：`timing-watchdog-auditor`、`failsafe-convergence-reviewer`
 - `bringup-path`
-  - 默认 Phase：`hazard-analysis -> deterministic-foundation -> link-diagnostics -> failsafe-validation`
-  - 默认 specialist：
-    - `hazard-analysis`：`state-machine-tracer`、`signal-path-tracer`
-    - `deterministic-foundation`：`register-state-auditor`、`timing-watchdog-auditor`
-    - `link-diagnostics`：`signal-path-tracer`
-    - `failsafe-validation`：`failsafe-convergence-reviewer`
+  - `bringup-path` 的场景内执行骨架、默认 Phase backbone、specialist 装配与 completion gate 见 `docs/BRINGUP_PATH.md`。
+  - 总调度层仅保留路由判定与分派规则，不再承担场景真源细节。
 - `design-safety-review`
   - 默认 Phase：`hazard-analysis -> deterministic-foundation -> failsafe-validation -> link-diagnostics（按需补）`
   - 默认 specialist：
