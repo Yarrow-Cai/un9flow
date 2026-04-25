@@ -176,6 +176,21 @@
    - 当前明确不承诺
 5. `docs/PLATFORMS.md` 与 `README.md` 必须将 `docs/CLAUDE_CODE_HOST.md` 暴露为 Claude Code host 入口之一。
 
+### Claude Code setup 真源规则
+
+1. `docs/CLAUDE_CODE_SETUP.md` 是 Claude Code 的最小 setup 真源文档。
+2. `docs/CLAUDE_CODE_SETUP.md` 必须回指：
+   - `docs/CLAUDE_CODE_HOST.md`
+   - `docs/PLATFORMS.md`
+   - `docs/SKILL_ARCHITECTURE.md`
+   - `docs/ORCHESTRATOR_PROMPT_CONTRACT.md`
+3. `docs/CLAUDE_CODE_SETUP.md` 必须明确：
+   - setup 前提
+   - 最小 setup 对象
+   - 最小 setup 步骤
+   - setup 后验证
+   - 当前明确不做
+
 ## 每层校验职责
 
 - **docs：规则完整性**

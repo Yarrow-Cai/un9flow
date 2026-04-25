@@ -117,6 +117,16 @@
 - [x] Claude Code 视角下的目录映射已固定为三层
 - [x] 当前可消费能力与不承诺边界已被显式固定
 
+## v9 - Claude Code setup 骨架
+
+目标：把 Claude Code 从“如何消费仓库”的说明推进到“如何最小把仓库接起来”的 setup 骨架说明。
+
+计划方向：
+
+- [x] `docs/CLAUDE_CODE_SETUP.md` 已落地为最小 setup 真源
+- [x] setup 前提、最小 setup 对象、最小 setup 步骤、setup 后验证与当前明确不做已被显式固定
+- [x] 最小 setup 步骤与 setup 后验证标准已被显式固定
+
 ## 长期目标
 
 把 `un9flow` 做成：

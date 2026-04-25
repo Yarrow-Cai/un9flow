@@ -69,6 +69,7 @@
 - `docs/PLATFORMS.md`：目标平台与后续接入方向
 - `docs/ROADMAP.md`：版本路线图
 - `docs/CLAUDE_CODE_HOST.md`：Claude Code 的最小 host 接入真源，定义目录映射、最小接入步骤、当前可消费能力与不承诺边界
+- `docs/CLAUDE_CODE_SETUP.md`：Claude Code 的最小 setup 真源，定义 setup 前提、最小 setup 对象、最小步骤与 setup 后验证
 - `docs/cases/`：incident workflow 回归样本（入口路由与 dispatch 期望基线）
 - `docs/cases/bms-daisy-chain-afe-end-to-end-example.md`：v6 第一份端到端 BMS 方法链示例，串起 bring-up → incident → watchdog → design-safety-review
 - `docs/cases/power-board-bringup-example.md`：v6 第二份功率板 bring-up 流程示例，展示安全基线、控制建立与升级判断

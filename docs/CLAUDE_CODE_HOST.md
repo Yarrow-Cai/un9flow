@@ -1,6 +1,8 @@
 # Claude Code Host 接入真源
 
-本文档是 `un9flow` 面向 **Claude Code** 的最小 host 接入真源，定义目录映射、最小接入步骤、当前可消费能力与明确不承诺范围。
+本文档是 `un9flow` 面向 **Claude Code** 的最小 host 接入真源，定义目录映射、当前可消费能力与明确不承诺范围。
+
+> Claude Code 的最小 setup 前提、setup 对象、setup 步骤与 setup 后验证详见 `docs/CLAUDE_CODE_SETUP.md`。本文档只负责说明“如何理解并消费”本仓库中的能力，不承担 setup 说明。
 
 ## 目标
 
@@ -64,15 +66,11 @@ Claude Code 是当前 `un9flow` 的**第一优先级 host**，原因如下：
 - **验证一致性**：运行 `python tools/validate_consistency.py` 检查 docs / skills / templates 的命名与结构一致性。
 - **回归检查**：运行 `python tools/run_generation_regression.py --check` 对比当前生成产物与 golden outputs。
 
-## 最小接入步骤
+## 消费路径
 
-1. **克隆仓库**
-   ```bash
-   git clone <repo-url> un9flow
-   cd un9flow
-   ```
+完成 setup（详见 `docs/CLAUDE_CODE_SETUP.md`）后，按以下路径消费本仓库能力：
 
-2. **验证文件存在**
+1. **验证文件存在**
    确认以下文件已就位：
    - `skills/**/SKILL.md`
    - `docs/PLATFORMS.md`
@@ -81,24 +79,24 @@ Claude Code 是当前 `un9flow` 的**第一优先级 host**，原因如下：
    - `tools/validate_consistency.py`
    - `tools/run_generation_regression.py`
 
-3. **运行一致性校验**
+2. **运行一致性校验**
    ```bash
    python tools/validate_consistency.py
    ```
    预期：无 L1 / L2 级别 finding，或 finding 已在 `docs/CONSISTENCY_VALIDATION.md` 中说明。
 
-4. **运行生成回归检查**
+3. **运行生成回归检查**
    ```bash
    python tools/run_generation_regression.py --check
    ```
    预期：各回归对象输出 `PASS <object>/<case>`，且命令退出码为 0。
 
-5. **在 Claude Code 中消费 skill**
+4. **在 Claude Code 中消费 skill**
    - 直接引用 `skills/orchestration/SKILL.md` 进入总入口。
    - 或引用具体场景入口，如 `skills/incident-investigation/SKILL.md`、`skills/bringup-path/SKILL.md`、`skills/design-safety-review/SKILL.md`。
    - Domain Specialist 由场景内调度器分派，不直接作为自由请求入口。
 
-6. **查阅协议与约束**
+5. **查阅协议与约束**
    - 路由与调度字段定义见 `docs/ORCHESTRATOR_PROMPT_CONTRACT.md`。
    - 总入口 / 子入口 / 辅助 skill / Domain Specialist 的边界见 `docs/SKILL_ARCHITECTURE.md`。
    - 平台方向与 host 优先级见 `docs/PLATFORMS.md`。
