@@ -23,7 +23,7 @@
 
 ## 当前状态
 
-目前仓库中只有方法论文档，不提供以下能力：
+目前仓库已包含文档真源与正式 `SKILL.md` 入口，但仍不提供以下能力：
 
 - 可直接安装的 slash skill
 - 自动创建 skill 目录映射
@@ -53,11 +53,12 @@
 - 复制人格化 specialist
 - 现阶段直接继承 gstack 安装器
 - 不承诺现阶段具备安装器、分发、目录映射或广泛 host 兼容能力
+- 其中“目录映射”在当前语境下，特指多 host 目录生成与自动安装目录映射；Claude Code 的最小目录映射说明单独见 `docs/CLAUDE_CODE_HOST.md`
 
 命名纪律：`Scenario / Phase / Domain Specialist / Artifact`
 
 host 优先级：
-1. Claude Code
+1. Claude Code —— 首个 host 锚点与优先落地对象，其最小接入骨架、目录映射、当前可消费能力与非承诺边界详见 `docs/CLAUDE_CODE_HOST.md`
 2. gstack 风格 skill 编排环境
 3. OpenClaw 作为外层调度预留位
 4. 其他 host 在核心 workflow 稳定后推进

@@ -160,6 +160,22 @@
    - 是否显式回指 `tools/generation_core.py`
    - 是否显式说明“输入是什么 / 输出是什么 / 输出是单文件还是 bundle"
 
+### Claude Code host 接入真源规则
+
+1. `docs/CLAUDE_CODE_HOST.md` 是 Claude Code 的最小 host 接入真源文档。
+2. `docs/CLAUDE_CODE_HOST.md` 必须回指：
+   - `docs/PLATFORMS.md`
+   - `docs/SKILL_ARCHITECTURE.md`
+   - `docs/ORCHESTRATOR_PROMPT_CONTRACT.md`
+3. `docs/CLAUDE_CODE_HOST.md` 必须把 Claude Code 视角下的目录映射固定为以下三层：
+   - 直接消费层
+   - 真源支撑层
+   - 模板 / 案例 / 回归支撑层
+4. `docs/CLAUDE_CODE_HOST.md` 必须明确：
+   - 当前可消费能力
+   - 当前明确不承诺
+5. `docs/PLATFORMS.md` 与 `README.md` 必须将 `docs/CLAUDE_CODE_HOST.md` 暴露为 Claude Code host 入口之一。
+
 ## 每层校验职责
 
 - **docs：规则完整性**

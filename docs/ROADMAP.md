@@ -107,6 +107,16 @@
 - [x] `isoSPI / AFE bring-up` 已固定为首个 canonical 子焦点
 - [x] bringup-path skill 已收紧为映射层，不再单独承担场景真源职责
 
+## v8 - Claude Code host 接入骨架
+
+目标：把 Claude Code 从当前优先 host 的文档说明对象推进为第一个有正式接入真源说明的 host。
+
+计划方向：
+
+- [x] `docs/CLAUDE_CODE_HOST.md` 已落地为最小 host 接入真源
+- [x] Claude Code 视角下的目录映射已固定为三层
+- [x] 当前可消费能力与不承诺边界已被显式固定
+
 ## 长期目标
 
 把 `un9flow` 做成：
