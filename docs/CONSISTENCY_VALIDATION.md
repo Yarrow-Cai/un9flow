@@ -204,6 +204,9 @@
 5. `--inspect` 必须与 `--dry-run`、`--force` 互斥，不允许组合使用。
 6. 目标路径必须按来源相对路径稳定镜像；同一来源 `skills/**/SKILL.md` 在同一 `--target-root` 下必须得到稳定且可预测的目标路径。
 7. `--dry-run` 必须输出稳定同步计划，`--force` 必须覆盖已存在目标文件，且脚本必须显式输出最小 summary 行为，便于 host 侧验证同步结果。
+8. `tools/sync_claude_code_skills.py --only <skill-name>` 只允许按 skill 目录名精确匹配一个正式 skill；`<skill-name>` 必须与某个正式 `skills/<skill-name>/SKILL.md` 的目录名完全一致。
+9. `--only` 不得支持多个值、按组过滤、路径模式过滤或 exclude；该参数的语义边界固定为“只精确点名一个正式 skill”。
+10. 当 `--only` 未命中任何正式 skill 时，脚本必须硬失败，并显式输出当前可用 formal skill 列表，禁止静默跳过、自动回退为全量同步或仅给出模糊错误。
 
 ## 每层校验职责
 

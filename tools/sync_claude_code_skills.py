@@ -17,6 +17,13 @@ ROOT = Path(__file__).resolve().parents[1]
 SKILLS_ROOT = ROOT / "skills"
 
 
+class SingleOnlyAction(argparse.Action):
+    def __call__(self, parser, namespace, values, option_string=None):
+        if getattr(namespace, self.dest, None) is not None:
+            parser.exit(2, "Cannot specify --only more than once.\n")
+        setattr(namespace, self.dest, values)
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description="Sync skills/**/SKILL.md into a Claude Code target root."
@@ -41,6 +48,11 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Print a static inventory of source and target skill files without writing files.",
     )
+    parser.add_argument(
+        "--only",
+        action=SingleOnlyAction,
+        help="Sync or inspect only the skill whose directory name exactly matches <skill-name>.",
+    )
     return parser
 
 
@@ -50,6 +62,24 @@ def display_path(path: Path) -> str:
 
 def discover_skill_files() -> list[Path]:
     return sorted(path for path in SKILLS_ROOT.rglob("SKILL.md") if path.is_file())
+
+
+def skill_name_for(skill_file: Path) -> str:
+    return skill_file.parent.name
+
+
+def select_skill_files(skill_files: list[Path], only: str | None) -> list[Path]:
+    if only is None:
+        return skill_files
+
+    selected = [skill_file for skill_file in skill_files if skill_name_for(skill_file) == only]
+    if selected:
+        return selected
+
+    available_skills = ", ".join(skill_name_for(skill_file) for skill_file in skill_files)
+    print(f"Unknown skill: {only}", file=sys.stderr)
+    print(f"Available skills: {available_skills}", file=sys.stderr)
+    raise SystemExit(2)
 
 
 def target_path_for(skill_file: Path, target_root: Path) -> Path:
@@ -183,7 +213,7 @@ def main(argv: list[str] | None = None) -> int:
         return 2
 
     target_root = Path(args.target_root)
-    skill_files = discover_skill_files()
+    skill_files = select_skill_files(discover_skill_files(), args.only)
 
     if args.inspect:
         return inspect_skill_files(skill_files=skill_files, target_root=target_root)

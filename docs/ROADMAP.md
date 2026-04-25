@@ -147,6 +147,16 @@
 - [x] inspect / dry-run / sync 三段能力已被显式分离
 - [x] inspect 输出结构已固定为头部摘要 / 逐项清单 / 尾部 summary
 
+## v12 - Claude Code selective skills sync
+
+目标：让 skills-only 同步脚本能精确点名只处理某一个正式 skill。
+
+计划方向：
+
+- [x] `--only <skill-name>` 已落地
+- [x] `--only` 已在 inspect / dry-run / sync 三种模式下生效
+- [x] 不存在的 skill 会硬失败并给出可用值列表
+
 ## 长期目标
 
 把 `un9flow` 做成：

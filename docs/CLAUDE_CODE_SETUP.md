@@ -74,12 +74,16 @@ python tools/sync_claude_code_skills.py --target-root <path> --inspect
 
 # 验证 skill 同步计划（dry-run）
 python tools/sync_claude_code_skills.py --target-root <path> --dry-run
+
+# 精确点名单个正式 skill 的预演同步
+python tools/sync_claude_code_skills.py --target-root <path> --only <skill-name> --dry-run
 ```
 
 上述命令均应返回成功（exit code 0），无报错信息。
 
 - `--inspect`：先看当前状态。用于在执行同步前盘点 skill 来源、目标路径与当前目标状态，属于"先盘点再执行"的辅助动作。
 - `--dry-run`：预演将执行的 copy 动作。输出稳定同步计划，且仅覆盖 `skills/**/SKILL.md`。
+- `--only <skill-name>`：最小可控同步能力，按 skill 目录名精确过滤一个 skill，用于精确点名单个正式 skill 的预演同步。当前不支持多个 `--only`、按组过滤、路径模式过滤或 exclude。
 
 ## 当前明确不做
 
