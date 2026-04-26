@@ -58,6 +58,11 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Inspect target skills/**/SKILL.md files and report whether each one is managed or stale.",
     )
+    parser.add_argument(
+        "--prune-advice",
+        action="store_true",
+        help="Inspect target skills/**/SKILL.md files and print cleanup advice for stale targets only.",
+    )
     return parser
 
 
@@ -157,6 +162,34 @@ def stale_check_skill_files(skill_files: list[Path], target_root: Path) -> int:
     print(f"- total: {len(target_skill_files)}")
     print(f"- managed: {managed}")
     print(f"- stale: {stale}")
+    return 0
+
+
+def prune_advice_skill_files(skill_files: list[Path], target_root: Path) -> int:
+    target_skill_files = discover_target_skill_files(target_root)
+    managed_targets = {
+        target_path_for(skill_file, target_root).resolve() for skill_file in skill_files
+    }
+    stale_targets = [
+        target_skill_file
+        for target_skill_file in target_skill_files
+        if target_skill_file.resolve() not in managed_targets
+    ]
+
+    print("PRUNE-ADVICE")
+    print(f"TARGET ROOT: {display_path(target_root)}")
+    print(f"TOTAL TARGET SKILLS: {len(target_skill_files)}")
+    print(f"STALE TARGETS: {len(stale_targets)}")
+
+    for target_skill_file in stale_targets:
+        print(f"- target: {display_path(target_skill_file)}")
+        print("  status: stale")
+        print("  advice: consider-cleanup")
+
+    print("SUMMARY")
+    print(f"- total: {len(target_skill_files)}")
+    print(f"- stale: {len(stale_targets)}")
+    print(f"- consider-cleanup: {len(stale_targets)}")
     return 0
 
 
@@ -264,12 +297,29 @@ def main(argv: list[str] | None = None) -> int:
     if args.stale_check and args.only is not None:
         print("Cannot combine --stale-check and --only.", file=sys.stderr)
         return 2
+    if args.prune_advice and args.stale_check:
+        print("Cannot combine --prune-advice and --stale-check.", file=sys.stderr)
+        return 2
+    if args.prune_advice and args.inspect:
+        print("Cannot combine --prune-advice and --inspect.", file=sys.stderr)
+        return 2
+    if args.prune_advice and args.dry_run:
+        print("Cannot combine --prune-advice and --dry-run.", file=sys.stderr)
+        return 2
+    if args.prune_advice and args.force:
+        print("Cannot combine --prune-advice and --force.", file=sys.stderr)
+        return 2
+    if args.prune_advice and args.only is not None:
+        print("Cannot combine --prune-advice and --only.", file=sys.stderr)
+        return 2
 
     target_root = Path(args.target_root)
     all_skill_files = discover_skill_files()
 
     if args.stale_check:
         return stale_check_skill_files(skill_files=all_skill_files, target_root=target_root)
+    if args.prune_advice:
+        return prune_advice_skill_files(skill_files=all_skill_files, target_root=target_root)
 
     skill_files = select_skill_files(all_skill_files, args.only)
 

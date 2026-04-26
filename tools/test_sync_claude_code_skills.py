@@ -119,6 +119,80 @@ class SyncClaudeCodeSkillsOnlyTests(unittest.TestCase):
         self.assertEqual(result.returncode, 2)
         self.assertIn("Cannot combine --stale-check and --only.", result.stderr)
 
+    def test_prune_advice_reports_only_stale_targets_and_is_read_only(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            target_root = Path(temp_dir)
+            managed_source = ROOT / "skills" / "orchestration" / "SKILL.md"
+            managed_target = target_root / "skills" / "orchestration" / "SKILL.md"
+            stale_target = target_root / "skills" / "stale-skill" / "SKILL.md"
+            ignored_target = target_root / "other" / "ignored" / "SKILL.md"
+
+            managed_target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(managed_source, managed_target)
+            stale_target.parent.mkdir(parents=True, exist_ok=True)
+            stale_target.write_text("# stale\n", encoding="utf-8")
+            ignored_target.parent.mkdir(parents=True, exist_ok=True)
+            ignored_target.write_text("# ignored\n", encoding="utf-8")
+
+            result = self.run_script("--target-root", temp_dir, "--prune-advice")
+
+            self.assertTrue(managed_target.exists())
+            self.assertTrue(stale_target.exists())
+            self.assertTrue(ignored_target.exists())
+            self.assertEqual(stale_target.read_text(encoding="utf-8"), "# stale\n")
+            self.assertEqual(ignored_target.read_text(encoding="utf-8"), "# ignored\n")
+
+        self.assertEqual(result.returncode, 0)
+        self.assertIn("PRUNE-ADVICE", result.stdout)
+        self.assertIn(f"TARGET ROOT: {target_root.as_posix()}", result.stdout)
+        self.assertIn("TOTAL TARGET SKILLS: 2", result.stdout)
+        self.assertIn("STALE TARGETS: 1", result.stdout)
+        self.assertIn(f"- target: {stale_target.as_posix()}", result.stdout)
+        self.assertIn("  status: stale", result.stdout)
+        self.assertIn("  advice: consider-cleanup", result.stdout)
+        self.assertNotIn(managed_target.as_posix(), result.stdout)
+        self.assertNotIn(ignored_target.as_posix(), result.stdout)
+        self.assertIn("SUMMARY", result.stdout)
+        self.assertIn("- total: 2", result.stdout)
+        self.assertIn("- stale: 1", result.stdout)
+        self.assertIn("- consider-cleanup: 1", result.stdout)
+
+    def test_prune_advice_on_missing_target_root_is_read_only(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            target_root = Path(temp_dir) / "missing-root"
+
+            result = self.run_script("--target-root", str(target_root), "--prune-advice")
+
+            self.assertEqual(result.returncode, 0)
+            self.assertIn("TOTAL TARGET SKILLS: 0", result.stdout)
+            self.assertIn("STALE TARGETS: 0", result.stdout)
+            self.assertIn("- total: 0", result.stdout)
+            self.assertIn("- stale: 0", result.stdout)
+            self.assertIn("- consider-cleanup: 0", result.stdout)
+            self.assertFalse(target_root.exists())
+
+    def test_prune_advice_conflicts_with_other_modes(self) -> None:
+        conflict_cases = [
+            (("--stale-check",), "Cannot combine --prune-advice and --stale-check."),
+            (("--inspect",), "Cannot combine --prune-advice and --inspect."),
+            (("--dry-run",), "Cannot combine --prune-advice and --dry-run."),
+            (("--force",), "Cannot combine --prune-advice and --force."),
+            (("--only", "orchestration"), "Cannot combine --prune-advice and --only."),
+        ]
+
+        for extra_args, expected_error in conflict_cases:
+            with self.subTest(args=extra_args):
+                with tempfile.TemporaryDirectory() as temp_dir:
+                    result = self.run_script(
+                        "--target-root",
+                        temp_dir,
+                        "--prune-advice",
+                        *extra_args,
+                    )
+
+                self.assertEqual(result.returncode, 2)
+                self.assertIn(expected_error, result.stderr)
+
     def test_inspect_only_filters_to_named_skill(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             result = self.run_script(

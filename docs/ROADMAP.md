@@ -167,6 +167,16 @@
 - [x] stale-check 已固定为 target-centric 只读模式
 - [x] stale-check 输出已固定为 `managed` / `stale` 与 summary
 
+## v14 - Claude Code prune advice
+
+目标：在不执行删除的前提下，为 stale 目标给出最小清理建议。
+
+计划方向：
+
+- [x] `--prune-advice` 已落地
+- [x] prune advice 只聚焦 stale 对象
+- [x] `consider-cleanup` 最小建议已固定
+
 ## 长期目标
 
 把 `un9flow` 做成：

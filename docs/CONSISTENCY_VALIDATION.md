@@ -211,6 +211,10 @@
 12. `--stale-check` 只允许输出 `managed` / `stale` 两类状态，并提供最小 summary；不得扩展为 repair、sync、diff、warning 分类或其他处置建议。
 13. `--stale-check` 不得提供 prune 建议、不得执行删除，也不得以任何形式修改目标目录内容。
 14. `--stale-check` 必须与 `--inspect`、`--dry-run`、`--force`、`--only` 互斥，不允许组合使用。
+15. `tools/sync_claude_code_skills.py --prune-advice` 只允许针对 `stale` 对象输出最小建议；不得重复列出 `managed` 清单，也不得把 `managed` 对象混入 prune advice 输出。
+16. `--prune-advice` 只允许输出 `advice: consider-cleanup` 这一种最小建议，不得扩展为其他 advice 类型、不得附带 repair / sync / delete 类动作建议。
+17. `--prune-advice` 不得输出删除命令、不得执行删除，也不得以任何形式修改目标目录内容。
+18. `--prune-advice` 必须与 `--stale-check`、`--inspect`、`--dry-run`、`--force`、`--only` 互斥，不允许组合使用。
 
 ## 每层校验职责
 
