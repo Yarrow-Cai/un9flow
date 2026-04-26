@@ -157,6 +157,16 @@
 - [x] `--only` 已在 inspect / dry-run / sync 三种模式下生效
 - [x] 不存在的 skill 会硬失败并给出可用值列表
 
+## v13 - Claude Code stale target detect
+
+目标：在不删除任何文件的前提下，识别目标目录里哪些 skill 已经 stale。
+
+计划方向：
+
+- [x] `--stale-check` 已落地
+- [x] stale-check 已固定为 target-centric 只读模式
+- [x] stale-check 输出已固定为 `managed` / `stale` 与 summary
+
 ## 长期目标
 
 把 `un9flow` 做成：

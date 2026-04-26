@@ -207,6 +207,10 @@
 8. `tools/sync_claude_code_skills.py --only <skill-name>` 只允许按 skill 目录名精确匹配一个正式 skill；`<skill-name>` 必须与某个正式 `skills/<skill-name>/SKILL.md` 的目录名完全一致。
 9. `--only` 不得支持多个值、按组过滤、路径模式过滤或 exclude；该参数的语义边界固定为“只精确点名一个正式 skill”。
 10. 当 `--only` 未命中任何正式 skill 时，脚本必须硬失败，并显式输出当前可用 formal skill 列表，禁止静默跳过、自动回退为全量同步或仅给出模糊错误。
+11. `tools/sync_claude_code_skills.py --stale-check` 只允许扫描目标目录中的 `skills/**/SKILL.md`，不得把目标目录下的其他文件或非 `SKILL.md` 对象纳入 stale 判定范围。
+12. `--stale-check` 只允许输出 `managed` / `stale` 两类状态，并提供最小 summary；不得扩展为 repair、sync、diff、warning 分类或其他处置建议。
+13. `--stale-check` 不得提供 prune 建议、不得执行删除，也不得以任何形式修改目标目录内容。
+14. `--stale-check` 必须与 `--inspect`、`--dry-run`、`--force`、`--only` 互斥，不允许组合使用。
 
 ## 每层校验职责
 

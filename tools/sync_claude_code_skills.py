@@ -53,6 +53,11 @@ def build_parser() -> argparse.ArgumentParser:
         action=SingleOnlyAction,
         help="Sync or inspect only the skill whose directory name exactly matches <skill-name>.",
     )
+    parser.add_argument(
+        "--stale-check",
+        action="store_true",
+        help="Inspect target skills/**/SKILL.md files and report whether each one is managed or stale.",
+    )
     return parser
 
 
@@ -86,6 +91,11 @@ def target_path_for(skill_file: Path, target_root: Path) -> Path:
     return target_root / skill_file.relative_to(ROOT)
 
 
+def discover_target_skill_files(target_root: Path) -> list[Path]:
+    target_skills_root = target_root / "skills"
+    return sorted(path for path in target_skills_root.rglob("SKILL.md") if path.is_file())
+
+
 def inspect_skill_files(skill_files: list[Path], target_root: Path) -> int:
     if not skill_files:
         print("No skill files found.", file=sys.stderr)
@@ -116,6 +126,37 @@ def inspect_skill_files(skill_files: list[Path], target_root: Path) -> int:
     print(f"- total: {len(skill_files)}")
     print(f"- existing: {existing}")
     print(f"- missing: {missing}")
+    return 0
+
+
+def stale_check_skill_files(skill_files: list[Path], target_root: Path) -> int:
+    target_skill_files = discover_target_skill_files(target_root)
+    managed_targets = {
+        target_path_for(skill_file, target_root).resolve() for skill_file in skill_files
+    }
+
+    managed = 0
+    stale = 0
+
+    print("STALE-CHECK")
+    print(f"TARGET ROOT: {display_path(target_root)}")
+    print(f"FOUND TARGET SKILLS: {len(target_skill_files)}")
+    print(f"CURRENT SOURCE SKILLS: {len(skill_files)}")
+
+    for target_skill_file in target_skill_files:
+        target_label = display_path(target_skill_file)
+        status = "managed" if target_skill_file.resolve() in managed_targets else "stale"
+        if status == "managed":
+            managed += 1
+        else:
+            stale += 1
+        print(f"- target: {target_label}")
+        print(f"  status: {status}")
+
+    print("SUMMARY")
+    print(f"- total: {len(target_skill_files)}")
+    print(f"- managed: {managed}")
+    print(f"- stale: {stale}")
     return 0
 
 
@@ -211,9 +252,26 @@ def main(argv: list[str] | None = None) -> int:
     if args.inspect and args.force:
         print("Cannot combine --inspect and --force.", file=sys.stderr)
         return 2
+    if args.stale_check and args.inspect:
+        print("Cannot combine --stale-check and --inspect.", file=sys.stderr)
+        return 2
+    if args.stale_check and args.dry_run:
+        print("Cannot combine --stale-check and --dry-run.", file=sys.stderr)
+        return 2
+    if args.stale_check and args.force:
+        print("Cannot combine --stale-check and --force.", file=sys.stderr)
+        return 2
+    if args.stale_check and args.only is not None:
+        print("Cannot combine --stale-check and --only.", file=sys.stderr)
+        return 2
 
     target_root = Path(args.target_root)
-    skill_files = select_skill_files(discover_skill_files(), args.only)
+    all_skill_files = discover_skill_files()
+
+    if args.stale_check:
+        return stale_check_skill_files(skill_files=all_skill_files, target_root=target_root)
+
+    skill_files = select_skill_files(all_skill_files, args.only)
 
     if args.inspect:
         return inspect_skill_files(skill_files=skill_files, target_root=target_root)
