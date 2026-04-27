@@ -215,6 +215,10 @@
 16. `--prune-advice` 只允许输出 `advice: consider-cleanup` 这一种最小建议，不得扩展为其他 advice 类型、不得附带 repair / sync / delete 类动作建议。
 17. `--prune-advice` 不得输出删除命令、不得执行删除，也不得以任何形式修改目标目录内容。
 18. `--prune-advice` 必须与 `--stale-check`、`--inspect`、`--dry-run`、`--force`、`--only` 互斥，不允许组合使用。
+19. `tools/sync_claude_code_skills.py --prune` 只允许删除 stale 的 `skills/**/SKILL.md` 文件本身，不得删除其他路径对象。
+20. `--prune` 不得删除空目录，也不得在删除 `SKILL.md` 后追加目录清理动作。
+21. `--prune` 不得删除非 `SKILL.md` 对象；目标目录中的其他文件、目录或附属对象均不得纳入 prune 删除范围。
+22. `--prune` 必须与 `--inspect`、`--dry-run`、`--stale-check`、`--prune-advice`、`--force`、`--only` 互斥，不允许组合使用。
 
 ## 每层校验职责
 

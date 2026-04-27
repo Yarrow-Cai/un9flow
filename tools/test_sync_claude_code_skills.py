@@ -193,6 +193,61 @@ class SyncClaudeCodeSkillsOnlyTests(unittest.TestCase):
                 self.assertEqual(result.returncode, 2)
                 self.assertIn(expected_error, result.stderr)
 
+    def test_prune_deletes_only_stale_skill_files(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            target_root = Path(temp_dir)
+            managed_source = ROOT / "skills" / "orchestration" / "SKILL.md"
+            managed_target = target_root / "skills" / "orchestration" / "SKILL.md"
+            stale_dir = target_root / "skills" / "stale-skill"
+            stale_target = stale_dir / "SKILL.md"
+            sibling_file = stale_dir / "notes.txt"
+            ignored_target = target_root / "other" / "ignored" / "SKILL.md"
+
+            managed_target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(managed_source, managed_target)
+            stale_target.parent.mkdir(parents=True, exist_ok=True)
+            stale_target.write_text("# stale\n", encoding="utf-8")
+            sibling_file.write_text("keep\n", encoding="utf-8")
+            ignored_target.parent.mkdir(parents=True, exist_ok=True)
+            ignored_target.write_text("# ignored\n", encoding="utf-8")
+
+            result = self.run_script("--target-root", temp_dir, "--prune")
+
+            self.assertTrue(managed_target.exists())
+            self.assertFalse(stale_target.exists())
+            self.assertTrue(stale_dir.exists())
+            self.assertTrue(sibling_file.exists())
+            self.assertTrue(ignored_target.exists())
+
+        self.assertEqual(result.returncode, 0)
+        self.assertIn(f"SKIPPED {managed_target.as_posix()}: managed", result.stdout)
+        self.assertIn(f"PRUNED {stale_target.as_posix()}", result.stdout)
+        self.assertNotIn(ignored_target.as_posix(), result.stdout)
+        self.assertIn("SUMMARY: pruned 1, skipped 1, failed 0", result.stdout)
+
+    def test_prune_conflicts_with_other_modes(self) -> None:
+        conflict_cases = [
+            (("--inspect",), "Cannot combine --prune and --inspect."),
+            (("--dry-run",), "Cannot combine --prune and --dry-run."),
+            (("--stale-check",), "Cannot combine --prune and --stale-check."),
+            (("--prune-advice",), "Cannot combine --prune and --prune-advice."),
+            (("--force",), "Cannot combine --prune and --force."),
+            (("--only", "orchestration"), "Cannot combine --prune and --only."),
+        ]
+
+        for extra_args, expected_error in conflict_cases:
+            with self.subTest(args=extra_args):
+                with tempfile.TemporaryDirectory() as temp_dir:
+                    result = self.run_script(
+                        "--target-root",
+                        temp_dir,
+                        "--prune",
+                        *extra_args,
+                    )
+
+                self.assertEqual(result.returncode, 2)
+                self.assertIn(expected_error, result.stderr)
+
     def test_inspect_only_filters_to_named_skill(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             result = self.run_script(

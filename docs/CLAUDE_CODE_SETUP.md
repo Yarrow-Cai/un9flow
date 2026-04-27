@@ -83,6 +83,9 @@ python tools/sync_claude_code_skills.py --target-root <path> --stale-check
 
 # 列出 stale 目标中可考虑清理的对象（prune advice）
 python tools/sync_claude_code_skills.py --target-root <path> --prune-advice
+
+# 显式触发下清理 stale 的 SKILL.md 目标文件
+python tools/sync_claude_code_skills.py --target-root <path> --prune
 ```
 
 上述命令均应返回成功（exit code 0），无报错信息。
@@ -92,6 +95,7 @@ python tools/sync_claude_code_skills.py --target-root <path> --prune-advice
 - `--only <skill-name>`：最小可控同步能力，按 skill 目录名精确过滤一个 skill，用于精确点名单个正式 skill 的预演同步。当前不支持多个 `--only`、按组过滤、路径模式过滤或 exclude。
 - `--stale-check`：只做 stale 目标识别与报告，用于识别目标目录中哪些 skill 仍受管、哪些已经 stale。当前不提供 prune 建议，也不执行删除。
 - `--prune-advice`：在 stale 目标识别的基础上，给出 `consider-cleanup` 最小建议，用于列出 stale 目标中可考虑清理的对象。当前不输出删除命令，也不执行删除。
+- `--prune`：显式动作层，只删除 stale 的 `skills/**/SKILL.md` 目标文件。当前不删除空目录，也不删除非 `SKILL.md` 对象。
 
 ## 当前明确不做
 

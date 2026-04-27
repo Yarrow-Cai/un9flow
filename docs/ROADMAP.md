@@ -177,6 +177,16 @@
 - [x] prune advice 只聚焦 stale 对象
 - [x] `consider-cleanup` 最小建议已固定
 
+## v15 - Claude Code explicit prune
+
+目标：在显式触发和受控边界下，删除 stale 的 `skills/**/SKILL.md` 目标文件。
+
+计划方向：
+
+- [x] `--prune` 已落地
+- [x] prune 已固定为显式动作层
+- [x] prune 只删除 stale 的 `SKILL.md` 文件本身，不删除空目录
+
 ## 长期目标
 
 把 `un9flow` 做成：

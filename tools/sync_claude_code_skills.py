@@ -59,6 +59,11 @@ def build_parser() -> argparse.ArgumentParser:
         help="Inspect target skills/**/SKILL.md files and report whether each one is managed or stale.",
     )
     parser.add_argument(
+        "--prune",
+        action="store_true",
+        help="Delete stale target skills/**/SKILL.md files without removing directories or other files.",
+    )
+    parser.add_argument(
         "--prune-advice",
         action="store_true",
         help="Inspect target skills/**/SKILL.md files and print cleanup advice for stale targets only.",
@@ -193,6 +198,37 @@ def prune_advice_skill_files(skill_files: list[Path], target_root: Path) -> int:
     return 0
 
 
+def prune_skill_files(skill_files: list[Path], target_root: Path) -> int:
+    target_skill_files = discover_target_skill_files(target_root)
+    managed_targets = {
+        target_path_for(skill_file, target_root).resolve() for skill_file in skill_files
+    }
+
+    pruned = 0
+    skipped = 0
+    failed = 0
+
+    for target_skill_file in target_skill_files:
+        target_label = display_path(target_skill_file)
+        if target_skill_file.resolve() in managed_targets:
+            print(f"SKIPPED {target_label}: managed")
+            skipped += 1
+            continue
+
+        try:
+            target_skill_file.unlink()
+        except OSError as exc:
+            print(f"FAILED {target_label}: {exc}")
+            failed += 1
+            continue
+
+        print(f"PRUNED {target_label}")
+        pruned += 1
+
+    print(f"SUMMARY: pruned {pruned}, skipped {skipped}, failed {failed}")
+    return 0 if failed == 0 else 1
+
+
 def classify_sync_action(destination: Path, force: bool) -> str:
     if not destination.exists():
         return "copy"
@@ -285,6 +321,24 @@ def main(argv: list[str] | None = None) -> int:
     if args.inspect and args.force:
         print("Cannot combine --inspect and --force.", file=sys.stderr)
         return 2
+    if args.prune and args.inspect:
+        print("Cannot combine --prune and --inspect.", file=sys.stderr)
+        return 2
+    if args.prune and args.dry_run:
+        print("Cannot combine --prune and --dry-run.", file=sys.stderr)
+        return 2
+    if args.prune and args.stale_check:
+        print("Cannot combine --prune and --stale-check.", file=sys.stderr)
+        return 2
+    if args.prune and args.prune_advice:
+        print("Cannot combine --prune and --prune-advice.", file=sys.stderr)
+        return 2
+    if args.prune and args.force:
+        print("Cannot combine --prune and --force.", file=sys.stderr)
+        return 2
+    if args.prune and args.only is not None:
+        print("Cannot combine --prune and --only.", file=sys.stderr)
+        return 2
     if args.stale_check and args.inspect:
         print("Cannot combine --stale-check and --inspect.", file=sys.stderr)
         return 2
@@ -320,6 +374,8 @@ def main(argv: list[str] | None = None) -> int:
         return stale_check_skill_files(skill_files=all_skill_files, target_root=target_root)
     if args.prune_advice:
         return prune_advice_skill_files(skill_files=all_skill_files, target_root=target_root)
+    if args.prune:
+        return prune_skill_files(skill_files=all_skill_files, target_root=target_root)
 
     skill_files = select_skill_files(all_skill_files, args.only)
 
