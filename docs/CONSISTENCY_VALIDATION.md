@@ -191,6 +191,24 @@
    - setup 后验证
    - 当前明确不做
 
+### OpenClaw host 真源规则
+
+1. `docs/OPENCLAW_HOST.md` 是 OpenClaw 外层调度真源文档。
+2. `docs/OPENCLAW_HOST.md` 必须回指：
+   - `docs/PLATFORMS.md`
+   - `docs/ORCHESTRATION.md`
+   - `docs/INCIDENT_WORKFLOW.md`
+   - `docs/BRINGUP_PATH.md`
+   - `docs/DESIGN_SAFETY_REVIEW.md`
+   - `skills/orchestration/SKILL.md`
+3. `docs/OPENCLAW_HOST.md` 必须明确：
+   - 外层调度定位
+   - 可负责的动作
+   - 不负责的动作
+   - 当前明确不承诺
+4. `README.md` 与 `docs/PLATFORMS.md` 必须将 `docs/OPENCLAW_HOST.md` 暴露为 OpenClaw host 入口之一。
+5. `docs/OPENCLAW_HOST.md` 只负责定义 OpenClaw 外层调度与仓库内总调度、场景真源和正式 skill 的关系边界，不得反向改写仓库内场景规则或 skill 契约。
+
 ### Claude Code skills-only 同步脚本边界规则
 
 1. `tools/sync_claude_code_skills.py` 只允许处理正式 `skills/**/SKILL.md`。

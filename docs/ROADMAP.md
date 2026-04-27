@@ -187,6 +187,16 @@
 - [x] prune 已固定为显式动作层
 - [x] prune 只删除 stale 的 `SKILL.md` 文件本身，不删除空目录
 
+## v16 - OpenClaw 外层调度真源
+
+目标：把 OpenClaw 从平台预留位推进为角色已定义的外层调度真源。
+
+计划方向：
+
+- [x] `docs/OPENCLAW_HOST.md` 已落地为外层调度真源
+- [x] OpenClaw 可负责与不负责的动作已被显式固定
+- [x] OpenClaw 与仓库内总调度、场景真源与正式 skill 的关系已被固定
+
 ## 长期目标
 
 把 `un9flow` 做成：

@@ -19,7 +19,7 @@
 - Factory Droid
 - Slate
 - Kiro
-- OpenClaw（作为调度或外层代理）
+- OpenClaw（外层调度预留位，角色边界与非承诺范围详见 `docs/OPENCLAW_HOST.md`）
 
 ## 当前状态
 
@@ -60,7 +60,7 @@
 host 优先级：
 1. Claude Code —— 首个 host 锚点与优先落地对象，其最小接入骨架、目录映射、当前可消费能力与非承诺边界详见 `docs/CLAUDE_CODE_HOST.md`
 2. gstack 风格 skill 编排环境
-3. OpenClaw 作为外层调度预留位
+3. OpenClaw 作为外层调度预留位（详见 `docs/OPENCLAW_HOST.md`）
 4. 其他 host 在核心 workflow 稳定后推进
 
 ## 项目特点
